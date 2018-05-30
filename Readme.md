@@ -1,7 +1,7 @@
 # Личный проект «Угадай мелодию» [![Build status][travis-image]][travis-url]
 
 * Студент: [Андрей Пудов](https://up.htmlacademy.ru/ecmascript/5/user/216332).
-* Наставник: `Неизвестно`.
+* Наставник: `Без наставника`.
 
 ---
 
