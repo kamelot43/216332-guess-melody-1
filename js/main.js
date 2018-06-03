@@ -1,5 +1,9 @@
-'use strict';
+import {render, changeScreen} from "./utils";
+import welcomeScreen from "./welcome-screen";
 
+changeScreen(welcomeScreen);
+
+/*
 const template = document.getElementById(`templates`);
 const screens = template.content.querySelectorAll(`.main`);
 const sectionMain = document.querySelector(`.main`);
@@ -53,3 +57,4 @@ document.addEventListener(`keydown`, function (evt) {
     showScreen(currentIndex - 1);
   }
 });
+*/
