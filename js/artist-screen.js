@@ -1,5 +1,6 @@
-import {render, changeScreen} from "./utils";
+import {render, changeScreen, playAgain} from "./utils";
 import genreScreen from "./genre-screen";
+import welcomeScreen from "./welcome-screen";
 
 const template = `<section class="main main--level main--level-artist">
   <a class="play-again play-again__wrap" href="#">
@@ -66,11 +67,17 @@ const template = `<section class="main main--level main--level-artist">
 
 const artistScreen = render(template);
 const form = artistScreen.querySelector(`.main-list`);
+const playAgainButton = artistScreen.querySelector(`.play-again`);
+
 
 form.addEventListener(`click`, (evt) => {
   if (evt.target.parentNode.classList == `main-answer`) {
     changeScreen(genreScreen);
   }
+});
+
+playAgainButton.addEventListener(`click`, () => {
+  changeScreen(welcomeScreen);
 });
 
 export default artistScreen;

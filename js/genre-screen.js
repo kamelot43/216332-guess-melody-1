@@ -1,4 +1,6 @@
-import {render} from "./utils";
+import {render, changeScreen} from "./utils";
+import getRandomResult from "./result-screen";
+import welcomeScreen from "./welcome-screen";
 
 const template = `<section class="main main--level main--level-genre">
   <a class="play-again play-again__wrap" href="#">
@@ -88,6 +90,7 @@ const template = `<section class="main main--level main--level-genre">
 
 const genreScreen = render(template);
 const answerBtn = genreScreen.querySelector(`.genre-answer-send`);
+const playAgainButton = genreScreen.querySelector(`.play-again`);
 const genreForm = genreScreen.querySelector(`.genre`);
 const answers = genreForm.elements.answer;
 
@@ -106,5 +109,17 @@ genreForm.addEventListener(`click`, (evt) => {
     isChecked();
   }
 });
+
+answerBtn.addEventListener(`click`, (evt) => {
+  evt.preventDefault;
+  changeScreen(getRandomResult());
+});
+
+playAgainButton.addEventListener(`click`, () => {
+  changeScreen(welcomeScreen);
+});
+
+// есть две проблемы : первая - форма должна очищаться после ответа и перехода на новый экрана
+// воторая - дублирование переменной playAgainButton и обработчика событий.
 
 export default genreScreen;
