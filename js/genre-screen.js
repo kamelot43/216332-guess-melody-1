@@ -111,8 +111,9 @@ genreForm.addEventListener(`click`, (evt) => {
 });
 
 answerBtn.addEventListener(`click`, (evt) => {
-  evt.preventDefault;
-  changeScreen(getRandomResult());
+  evt.preventDefault();
+  const randomResult = getRandomResult();
+  changeScreen(randomResult);
 });
 
 playAgainButton.addEventListener(`click`, () => {

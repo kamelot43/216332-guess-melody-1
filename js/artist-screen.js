@@ -1,4 +1,4 @@
-import {render, changeScreen, playAgain} from "./utils";
+import {render, changeScreen} from "./utils";
 import genreScreen from "./genre-screen";
 import welcomeScreen from "./welcome-screen";
 
@@ -71,7 +71,7 @@ const playAgainButton = artistScreen.querySelector(`.play-again`);
 
 
 form.addEventListener(`click`, (evt) => {
-  if (evt.target.parentNode.classList == `main-answer`) {
+  if (evt.target.parentNode.classList === `main-answer`) {
     changeScreen(genreScreen);
   }
 });
