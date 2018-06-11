@@ -1,5 +1,6 @@
 import {render, changeScreen} from "./utils";
-import artistScreen from "./artist-screen";
+import startGame from "./game";
+// import artistScreen from "./artist-screen";
 
 const template = `<section class="main main--welcome">
   <section class="logo" title="Угадай мелодию"><h1>Угадай мелодию</h1></section>
@@ -16,7 +17,7 @@ const welcomeScreen = render(template);
 const playBtn = welcomeScreen.querySelector(`.main-play`);
 
 playBtn.addEventListener(`click`, () => {
-  changeScreen(artistScreen);
+  startGame();
 });
 
 export default welcomeScreen;
