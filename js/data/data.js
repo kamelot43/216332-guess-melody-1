@@ -15,7 +15,7 @@ export default {
         src: ``,
         artist: `Пелагея`,
         next() {
-          return 2;
+          return `level-2`;
         }
       },
       {
@@ -50,7 +50,7 @@ export default {
         src: ``,
         artist: `Metalica`,
         next() {
-          return 3;
+          return `level-3`;
         }
       },
       {
@@ -85,7 +85,7 @@ export default {
         src: ``,
         artist: `Дидюля`,
         next() {
-          return 4;
+          return `level-4`;
         }
       },
       {

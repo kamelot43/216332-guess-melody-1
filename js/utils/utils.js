@@ -1,6 +1,6 @@
 export const render = (template) => {
   const wrapper = document.createElement(`div`);
-  wrapper.className = `main`;
+  // wrapper.className = `main`;
   wrapper.innerHTML = template;
   return wrapper;
 };
