@@ -1,9 +1,9 @@
 const displayResults = (statistics, player) => {
 
   if (player.notes <= 0) {
-    return `У вас закончились все попытки. Ничего, повезёт в следующий раз!`;
+    return `У вас закончились все попытки. <br> Ничего, повезёт в следующий раз!`;
   } else if (player.time <= 0) {
-    return `Время вышло! Вы не успели отгадать все мелодии`;
+    return `Время вышло! <br> Вы не успели отгадать все мелодии`;
   }
   statistics.push(player.points);
   const newArray = [...statistics];

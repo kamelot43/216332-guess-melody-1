@@ -1,3 +1,6 @@
+export let statistics = [4, 5, 8, 10, 11];
+export let userAnswers = [];
+
 export default {
   "level-1": {
     title: `Кто исполняет эту песню ?`,

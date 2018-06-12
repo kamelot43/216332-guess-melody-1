@@ -1,7 +1,29 @@
 export const INITIAL_GAME = Object.freeze({
   level: `level-1`,
   lives: 3,
+  maxLevel: 11,
+  minLives: 0,
+  baseTime: 35
 });
+
+export const USER_ANSWER = Object.freeze({
+  success: true,
+  time: 35
+});
+
+export const changeAnswer = (base, success, time = INITIAL_GAME.baseTime) => {
+  return Object.assign({}, base, {success}, {time});
+};
+
+export const BASE_RESULT = {
+  notes: 3,
+  time: 35,
+  points: 0
+};
+
+export const changeResult = (base, notes = INITIAL_GAME.lives, time = INITIAL_GAME.baseTime, points) => {
+  return Object.assign({}, base, {notes}, {time}, {points});
+};
 
 export const changeLevel = (game, level) => {
   if (level === undefined) {
@@ -18,6 +40,7 @@ export const canContinue = (game) => game.lives - 1 >= 0;
 
 export const die = (game) => {
   if (!canContinue(game)) {
+    alert(`проигрыш`);
     throw new Error(`You can't continue anymore`);
   }
 
