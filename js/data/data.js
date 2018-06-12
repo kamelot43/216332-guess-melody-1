@@ -134,14 +134,16 @@ export default {
       },
       {
         id: `a-4`,
-        value: `answer-4`,
         artist: `Kevin MacLeod`,
         name: `Long Stroll`,
         src: `https://www.youtube.com/audiolibrary_download?vid=91624fdc22fc54ed`,
         genre: `Jazz`,
         answer: false
       }
-    ])
+    ]),
+    next() {
+      return `level-5`;
+    }
   },
   "level-5": {
     title: `Кто исполняет эту песню ?`,

@@ -2,6 +2,7 @@ import INITIAL_GAME, {changeLevel, canContinue, die} from "./state";
 import {render, changeScreen} from "./utils/utils";
 import {headerTemplate} from "./header";
 import {artistTemplate} from "./artist-screen";
+import {genreTemplate} from "./genre-screen";
 import levels from "./data/data";
 
 
@@ -54,6 +55,69 @@ const startGame = () => {
     });
   };
 
+  const createGenreGame = () => {
+    const answerBtn = document.querySelector(`.genre-answer-send`);
+    // const playAgainButton = document.querySelector(`.play-again`);
+    const genreForm = document.querySelector(`.genre`);
+    const answers = genreForm.elements.answer;
+
+    answerBtn.disabled = true;
+
+    const isChecked = () => {
+      if ([...answers].some((node) => node.checked)) {
+        answerBtn.disabled = false;
+      } else {
+        answerBtn.disabled = true;
+      }
+    };
+
+    genreForm.addEventListener(`click`, (evt) => {
+      if (evt.target.hasAttribute(`name`)) {
+        isChecked();
+      }
+    });
+
+    answerBtn.addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+      const checkedInputs = [...answers].filter((it) => {
+        return it.checked && it.value === `true`;
+      }).length;
+
+
+      let test = [...levels[game.level].audios];
+      let z = levels[game.level].next();
+      game = changeLevel(game, z);
+      let sort = test.filter((it) => {
+        return it.answer == true;
+      }).length;
+      // console.log(sort);
+      console.log(game);
+      // const randomResult = getRandomResult();
+      // changeScreen(randomResult);
+    });
+
+    /* form.addEventListener(`click`, (evt) => {
+      if (evt.target.classList.contains(`main-answer-r`)) {
+        let test = [...levels[game.level].answers];
+        for (let i of test) {
+          if (i.id === evt.target.value) {
+            const res = i.next();
+            try {
+              game = changeLevel(game, res);
+              changelevelType();
+            } catch (e) {
+              game = die(game);
+              updateHeader(game);
+            }
+            if (!canContinue(game)) {
+
+            }
+          }
+        }
+      }
+    });*/
+  };
+
 
   const changelevelType = () => {
     if (levels[game.level].type === `artist`) {
@@ -61,9 +125,9 @@ const startGame = () => {
       renderLevel();
       createArtistGame();
     } else {
-      console.log(`false`);
-      // this.view = new GenreView(store.currentState);
-      // this.createGenreGame();
+      view = render(genreTemplate(game));
+      renderLevel();
+      createGenreGame();
     }
     return view;
   };
