@@ -163,19 +163,23 @@ export default {
         id: `answer-1`,
         src: ``,
         artist: `Riot`,
-        answer: true
+        next() {
+          return `level-6`;
+        }
       },
       {
         id: `answer-2`,
         src: ``,
         artist: `Пелагея`,
-        answer: false
+        next() {
+        }
       },
       {
         id: `answer-3`,
         src: ``,
         artist: `Иван Дорн`,
-        answer: false
+        next() {
+        }
       }
     ])
   },
@@ -194,19 +198,23 @@ export default {
         id: `answer-1`,
         src: ``,
         artist: `Пелагея`,
-        answer: false
+        next() {
+          return `level-7`;
+        }
       },
       {
         id: `answer-2`,
         src: ``,
         artist: `Боб Марли`,
-        answer: false
+        next() {
+        }
       },
       {
         id: `answer-3`,
         src: ``,
         artist: `Kevin MacLeod`,
-        answer: true
+        next() {
+        }
       }
     ])
   },
@@ -225,19 +233,23 @@ export default {
         id: `answer-1`,
         src: ``,
         artist: `Metalica`,
-        answer: false
+        next() {
+          return `level-8`;
+        }
       },
       {
         id: `answer-2`,
         src: ``,
         artist: `Jingle Punks`,
-        answer: true
+        next() {
+        }
       },
       {
         id: `answer-3`,
         src: ``,
         artist: `Kevin MacLeod`,
-        answer: false
+        next() {
+        }
       }
     ])
   },
@@ -256,19 +268,23 @@ export default {
         id: `answer-1`,
         src: ``,
         artist: `Дидюля`,
-        answer: false
+        next() {
+          return `level-9`;
+        }
       },
       {
         id: `answer-2`,
         src: ``,
         artist: `Audionautix`,
-        answer: true
+        next() {
+        }
       },
       {
         id: `answer-3`,
         src: ``,
         artist: `Дима Билан`,
-        answer: false
+        next() {
+        }
       }
     ])
   },
@@ -309,7 +325,11 @@ export default {
         genre: `Jazz`,
         answer: false
       }
-    ])
+    ]),
+    next() {
+      return `level-10`;
+    }
+
   },
   "level-10": {
     title: `Кто исполняет эту песню ?`,
@@ -326,19 +346,23 @@ export default {
         id: `answer-1`,
         src: ``,
         artist: `Riot`,
-        answer: true
+        next() {
+          return `level-11`;
+        }
       },
       {
         id: `answer-2`,
         src: ``,
         artist: `Пелагея`,
-        answer: false
+        next() {
+        }
       },
       {
         id: `answer-3`,
         src: ``,
         artist: `Иван Дорн`,
-        answer: false
+        next() {
+        }
       }
     ])
   }

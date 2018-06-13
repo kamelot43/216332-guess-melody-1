@@ -1,13 +1,13 @@
 export const INITIAL_GAME = Object.freeze({
   level: `level-1`,
   lives: 3,
-  maxLevel: 11,
+  maxLevel: `level-11`,
   minLives: 0,
   baseTime: 35
 });
 
 export const USER_ANSWER = Object.freeze({
-  success: true,
+  answer: true,
   time: 35
 });
 
