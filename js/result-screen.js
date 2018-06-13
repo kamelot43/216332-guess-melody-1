@@ -58,19 +58,3 @@ export default (statistics, userAnswers) => {
   </section>`;
   }
 };
-
-/* const result = [winScreen, livesOverScreen, timeOverScreen];
-
-const replayButtons = result.map((it) => {
-  return it.querySelector(`.main-replay`);
-});
-
-replayButtons.forEach((btn) => {
-  btn.addEventListener(`click`, () => {
-    changeScreen(artistScreen);
-  });
-});
-
-const getRandomResult = () => result[Math.floor(Math.random() * result.length)];
-export default getRandomResult;
-*/

@@ -1,3 +1,5 @@
+import levels, {statistics, userAnswers} from "./data/data";
+
 export const INITIAL_GAME = Object.freeze({
   level: `level-1`,
   lives: 3,
@@ -7,7 +9,7 @@ export const INITIAL_GAME = Object.freeze({
 });
 
 export const USER_ANSWER = Object.freeze({
-  answer: true,
+  success: true,
   time: 35
 });
 
@@ -49,6 +51,11 @@ export const die = (game) => {
   return Object.assign({}, game, {
     lives
   });
+};
+
+export const resetUserAnswers = () => {
+  userAnswers.length = 0;
+  return userAnswers;
 };
 
 export default INITIAL_GAME;

@@ -5,7 +5,8 @@ import INITIAL_GAME, {
   changeAnswer,
   USER_ANSWER,
   BASE_RESULT,
-  changeResult
+  changeResult,
+  resetUserAnswers
 } from "./state";
 import {render, changeScreen} from "./utils/utils";
 import {headerTemplate} from "./header";
@@ -14,13 +15,13 @@ import {genreTemplate} from "./genre-screen";
 import levels, {statistics, userAnswers} from "./data/data";
 import calcPoints from "./data/calc-points";
 import resultScreen from "./result-screen";
+import welcomeScreen from "./welcome-screen";
 
 let game;
 let header;
 let view;
 let baseAnswer = Object.assign({}, USER_ANSWER);
 let baseResult = Object.assign({}, BASE_RESULT);
-let result;
 
 const startGame = () => {
   game = Object.assign({}, INITIAL_GAME);
@@ -28,11 +29,17 @@ const startGame = () => {
   const gameContainerElement = document.createElement(`div`);
   gameContainerElement.classList.add(`main`);
 
+
   const renderLevel = () => {
     gameContainerElement.innerHTML = ``;
     view.classList.add(`main`);
     gameContainerElement.appendChild(header);
     gameContainerElement.appendChild(view);
+    // Кнопка играть снова + обработчик событий
+    const playAgainButton = header.querySelector(`.play-again`);
+    playAgainButton.addEventListener(`click`, () => {
+      changeScreen(welcomeScreen);
+    });
     changeScreen(gameContainerElement);
   };
 
@@ -41,19 +48,50 @@ const startGame = () => {
     gameContainerElement.replaceChild(currentHeader, header);
     header = currentHeader;
   };
+  // Расчет результата игры : подсчет очков, вывод экрана победы или поражения
+  const changeGameResult = (game, state = true) => {
+    let gameResult;
+    const gamePoints = calcPoints(userAnswers, game.lives);
+    if (!state) {
+      gameResult = changeResult(baseResult, game.lives);
+    } else {
+      gameResult = changeResult(
+          baseResult,
+          game.lives,
+          undefined,
+          gamePoints
+      );
+    }
+    // gameResult = changeResult(baseResult, game.lives);
+    const result = render(resultScreen(statistics, gameResult));
+    const mainReplayButton = result.querySelector(`.main-replay`);
+    mainReplayButton.addEventListener(`click`, () => {
+      changeScreen(welcomeScreen);
+    });
+    result.classList.add(`main`);
+    changeScreen(result);
+    resetUserAnswers();
+  };
+
   // Функция проверки текущего уровня : возможно ли продолжить игру или игра закончена ?
   const checkLevel = (game) => {
   // .1 Условие , если игру нельзя продолжать
     if (!canContinue(game)) {
-      const gamePoints = calcPoints(userAnswers, game.lives);
+      /* const gamePoints = calcPoints(userAnswers, game.lives);
       const gameResult = changeResult(baseResult, game.lives);
       result = render(resultScreen(statistics, gameResult));
+      const mainReplayButton = result.querySelector(`.main-replay`);
+      mainReplayButton.addEventListener(`click`, () => {
+        changeScreen(welcomeScreen);
+      });
       result.classList.add(`main`);
       changeScreen(result);
+      resetUserAnswers();*/
+      changeGameResult(game, false);
     }
     // Условие достижения максимального уровня
     else if (game.level === INITIAL_GAME.maxLevel) {
-      const gamePoints = calcPoints(userAnswers, game.lives);
+      /* const gamePoints = calcPoints(userAnswers, game.lives);
       const gameResult = changeResult(
           baseResult,
           undefined,
@@ -61,8 +99,14 @@ const startGame = () => {
           gamePoints
       );
       result = render(resultScreen(statistics, gameResult));
+      const mainReplayButton = result.querySelector(`.main-replay`);
+      mainReplayButton.addEventListener(`click`, () => {
+        changeScreen(welcomeScreen);
+      });
       result.classList.add(`main`);
       changeScreen(result);
+      resetUserAnswers();*/
+      changeGameResult(game);
 
     }
     // все другие случаи
@@ -85,6 +129,7 @@ const startGame = () => {
               game = changeLevel(game, nextLevel);
               // Добавить ответ в массив ответов пользователя
               userAnswers.push(baseAnswer);
+              console.log(userAnswers);
             } catch (e) {
               game = die(game);
               // Добавить ответ в массив ответов пользователя
@@ -93,28 +138,6 @@ const startGame = () => {
               updateHeader(game);
             }
             checkLevel(game);
-            /* if (game.level === INITIAL_GAME.maxLevel) {
-              const gamePoints = calcPoints(userAnswers, game.lives);
-              const gameResult = changeResult(
-                  baseResult,
-                  undefined,
-                  undefined,
-                  gamePoints
-              );
-              result = render(resultScreen(statistics, gameResult));
-              result.classList.add(`main`);
-              changeScreen(result);
-            } else {
-              changelevelType();
-            }*/
-
-            /* if (!canContinue(game)) {
-              const gamePoints = calcPoints(userAnswers, game.lives);
-              const gameResult = changeResult(baseResult, game.lives);
-              result = render(resultScreen(statistics, gameResult));
-              result.classList.add(`main`);
-              changeScreen(result);
-            }*/
           }
         }
       }
@@ -162,21 +185,6 @@ const startGame = () => {
         let nextLevel = levels[game.level].next();
         game = changeLevel(game, nextLevel);
         userAnswers.push(baseAnswer);
-        // Дублирование кода
-        /* if (game.level === INITIAL_GAME.maxLevel) {
-          const gamePoints = calcPoints(userAnswers, game.lives);
-          const gameResult = changeResult(
-              baseResult,
-              undefined,
-              undefined,
-              gamePoints
-          );
-          result = render(resultScreen(statistics, gameResult));
-          result.classList.add(`main`);
-          changeScreen(result);
-        } else {
-          changelevelType();
-        }*/
       } else {
         game = die(game);
         const falseAnswer = changeAnswer(baseAnswer, false);
@@ -184,14 +192,6 @@ const startGame = () => {
         updateHeader(game);
       }
       checkLevel(game);
-      // дублирование кода
-      /* if (!canContinue(game)) {
-        const gamePoints = calcPoints(userAnswers, game.lives);
-        const gameResult = changeResult(baseResult, game.lives);
-        result = render(resultScreen(statistics, gameResult));
-        result.classList.add(`main`);
-        changeScreen(result);
-      }*/
     });
   };
 

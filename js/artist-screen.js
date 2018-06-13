@@ -31,11 +31,3 @@ export const artistTemplate = (state = INITIAL_GAME) =>
     </form>
   </div>
 </section>`;
-
-// const playAgainButton = document.querySelector(`.play-again`);
-
-
-/* playAgainButton.addEventListener(`click`, () => {
-  // changeScreen(welcomeScreen);
-  console.log(`hello`);
-});*/
