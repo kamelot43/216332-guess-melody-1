@@ -36,10 +36,10 @@ describe(`return game statistic`, () => {
     assert.equal(displayResults(statistics, player2), `Вы заняли 3 место из 7 игроков. Это лучше, чем у 57% игроков`);
   });
   it(`should return time is over`, () => {
-    assert.equal(displayResults(statistics, timeOut), `Время вышло! Вы не успели отгадать все мелодии`);
+    assert.equal(displayResults(statistics, timeOut), `Время вышло! <br> Вы не успели отгадать все мелодии`);
   });
   it(`should return game is over`, () => {
-    assert.equal(displayResults(statistics, gameOver), `У вас закончились все попытки. Ничего, повезёт в следующий раз!`);
-    assert.equal(displayResults(statistics, gameOver), `У вас закончились все попытки. Ничего, повезёт в следующий раз!`);
+    assert.equal(displayResults(statistics, gameOver), `У вас закончились все попытки. <br> Ничего, повезёт в следующий раз!`);
+
   });
 });
