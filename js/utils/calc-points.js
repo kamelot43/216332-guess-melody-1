@@ -1,7 +1,7 @@
 const BASE_VALUE = {
   correctAnswer: 1,
   quickCorrectAnswer: 2,
-  falseAnswer: 2,
+  falseAnswer: -2,
   baseNotes: 3,
   fullGame: 10
 };
@@ -13,12 +13,12 @@ const calcPoints = (arr, notes) => {
   }
 
   arr.forEach((it) => {
-    if (it.success === true && it.time < 30) {
+    if (it.answer === true && it.time < 30) {
       points += BASE_VALUE.quickCorrectAnswer;
     }
-    if (it.success === true && it.time > 30) {
+    if (it.answer === true && it.time > 30) {
       points += BASE_VALUE.correctAnswer;
-    } else if (it.success === false) {
+    } else if (it.answer === false) {
       points -= BASE_VALUE.falseAnswer;
     }
 
