@@ -1,4 +1,4 @@
-import levels, {statistics, userAnswers} from "./data/data";
+import {userAnswers} from "./data/data";
 
 export const INITIAL_GAME = Object.freeze({
   level: `level-1`,
@@ -42,7 +42,6 @@ export const canContinue = (game) => game.lives - 1 >= 0;
 
 export const die = (game) => {
   if (!canContinue(game)) {
-    alert(`проигрыш`);
     throw new Error(`You can't continue anymore`);
   }
 

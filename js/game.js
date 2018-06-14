@@ -49,15 +49,15 @@ const startGame = () => {
     header = currentHeader;
   };
   // Расчет результата игры : подсчет очков, вывод экрана победы или поражения
-  const changeGameResult = (game, state = true) => {
+  const changeGameResult = (gameState, state = true) => {
     let gameResult;
-    const gamePoints = calcPoints(userAnswers, game.lives);
+    const gamePoints = calcPoints(userAnswers, gameState.lives);
     if (!state) {
-      gameResult = changeResult(baseResult, game.lives);
+      gameResult = changeResult(baseResult, gameState.lives);
     } else {
       gameResult = changeResult(
           baseResult,
-          game.lives,
+          gameState.lives,
           undefined,
           gamePoints
       );
@@ -74,43 +74,13 @@ const startGame = () => {
   };
 
   // Функция проверки текущего уровня : возможно ли продолжить игру или игра закончена ?
-  const checkLevel = (game) => {
+  const checkLevel = (gameValue) => {
   // .1 Условие , если игру нельзя продолжать
-    if (!canContinue(game)) {
-      /* const gamePoints = calcPoints(userAnswers, game.lives);
-      const gameResult = changeResult(baseResult, game.lives);
-      result = render(resultScreen(statistics, gameResult));
-      const mainReplayButton = result.querySelector(`.main-replay`);
-      mainReplayButton.addEventListener(`click`, () => {
-        changeScreen(welcomeScreen);
-      });
-      result.classList.add(`main`);
-      changeScreen(result);
-      resetUserAnswers();*/
-      changeGameResult(game, false);
-    }
-    // Условие достижения максимального уровня
-    else if (game.level === INITIAL_GAME.maxLevel) {
-      /* const gamePoints = calcPoints(userAnswers, game.lives);
-      const gameResult = changeResult(
-          baseResult,
-          undefined,
-          undefined,
-          gamePoints
-      );
-      result = render(resultScreen(statistics, gameResult));
-      const mainReplayButton = result.querySelector(`.main-replay`);
-      mainReplayButton.addEventListener(`click`, () => {
-        changeScreen(welcomeScreen);
-      });
-      result.classList.add(`main`);
-      changeScreen(result);
-      resetUserAnswers();*/
-      changeGameResult(game);
-
-    }
-    // все другие случаи
-    else {
+    if (!canContinue(gameValue)) {
+      changeGameResult(gameValue, false);
+    } else if (game.level === INITIAL_GAME.maxLevel) {
+      changeGameResult(gameValue);
+    } else {
       changelevelType();
     }
   };
@@ -129,7 +99,6 @@ const startGame = () => {
               game = changeLevel(game, nextLevel);
               // Добавить ответ в массив ответов пользователя
               userAnswers.push(baseAnswer);
-              console.log(userAnswers);
             } catch (e) {
               game = die(game);
               // Добавить ответ в массив ответов пользователя

@@ -1,6 +1,3 @@
-import {render, changeScreen} from "./utils";
-import getRandomResult from "./result-screen";
-import welcomeScreen from "./welcome-screen";
 import INITIAL_GAME from "./state";
 import levels from "./data/data";
 

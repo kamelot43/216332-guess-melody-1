@@ -1,4 +1,4 @@
-import {render, changeScreen} from "./utils";
+import {render} from "./utils";
 import startGame from "./game";
 // import artistScreen from "./artist-screen";
 

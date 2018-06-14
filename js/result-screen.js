@@ -1,4 +1,3 @@
-import {render, changeScreen} from "./utils";
 import INITIAL_GAME from "./state";
 import displayResults from "./data/display-results";
 // import artistScreen from "./artist-screen";
