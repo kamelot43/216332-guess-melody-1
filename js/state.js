@@ -1,12 +1,19 @@
-import {userAnswers} from "./data/data";
+import levels, {userAnswers} from "./data/data";
 
 export const INITIAL_GAME = Object.freeze({
   level: `level-1`,
   lives: 3,
-  maxLevel: `level-11`,
+  maxLevel: `level-10`,
   minLives: 0,
   baseTime: 35
 });
+
+export const Result = {
+  NOOP: 0,
+  DIE: 1,
+  WIN: 2,
+  NEXT_LEVEL: 3
+};
 
 export const USER_ANSWER = Object.freeze({
   success: true,
@@ -26,6 +33,8 @@ export const BASE_RESULT = {
 export const changeResult = (base, notes = INITIAL_GAME.lives, time = INITIAL_GAME.baseTime, points) => {
   return Object.assign({}, base, {notes}, {time}, {points});
 };
+
+export const getLevel = (state) => levels[`level-${state.level}`];
 
 export const changeLevel = (game, level) => {
   if (level === undefined) {

@@ -1,7 +1,13 @@
 import INITIAL_GAME from "./state";
+import AbstractView from "./abstract-view";
 
-export const headerTemplate = (state) => {
-  return `<a class="play-again play-again__wrap" href="#">
+export default class HeaderView extends AbstractView {
+  constructor(game) {
+    super();
+    this.game = game;
+  }
+  get template() {
+    return `<a class="play-again play-again__wrap" href="#">
     <img class="play-again__img" src="/img/melody-logo-ginger.png" alt="logo" width="177" height="76">
   </a>
   <svg xmlns="http://www.w3.org/2000/svg" class="timer" viewBox="0 0 780 780">
@@ -17,9 +23,23 @@ export const headerTemplate = (state) => {
     </div>
   </svg>
   <div class="main-mistakes">
-      ${new Array(INITIAL_GAME.lives - state.lives).fill(`<img class="main-mistake" src="img/wrong-answer.png" width="35" height="49">`).join(``)}
+      ${new Array(INITIAL_GAME.lives - this.game.lives).fill(`<img class="main-mistake" src="img/wrong-answer.png" width="35" height="49">`).join(``)}
     </div>`;
-};
+  }
+
+  bind() {
+    const playAgainButton = this.element.querySelector(`.play-again`);
+
+    const playAgainHandler = (evt) => {
+      evt.preventDefault();
+      this.onPlayAgainClick();
+    };
+
+    playAgainButton.addEventListener(`click`, playAgainHandler);
+  }
+
+  onPlayAgainClick() {}
+}
 
 // const playAgainButton = document.querySelector(`.play-again`);
 

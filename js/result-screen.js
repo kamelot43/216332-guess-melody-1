@@ -1,5 +1,71 @@
 import INITIAL_GAME from "./state";
 import displayResults from "./data/display-results";
+import AbstractView from "./abstract-view";
+
+const TYPE_TEXT = {
+  win: {
+    title: `Вы настоящий меломан!`
+  },
+  livesOver: {
+    title: `Какая жалость!`
+  },
+  timeOver: {
+    title: `Увы и ах!`
+  }
+};
+
+export default class ResultView extends AbstractView {
+  constructor(statistics, userAnswers) {
+    super();
+    this.userAnswers = userAnswers;
+    this.statistics = statistics;
+  }
+
+  get template() {
+    if (this.userAnswers.notes > 0 && this.userAnswers.time > 0) {
+      return `<section class="main main--result">
+        <section class="logo" title="Угадай мелодию"><h1>Угадай мелодию</h1></section>
+
+        <h2 class="title">${this.findCurrentTitle()}</h2>
+        <div class="main-stat">За&nbsp;3&nbsp;минуты и 25&nbsp;секунд
+          <br>вы&nbsp;набрали ${this.userAnswers.points} баллов (8 быстрых)
+          <br>совершив ${INITIAL_GAME.lives - this.userAnswers.notes} ошибки</div>
+        <span class="main-comparison">${displayResults(this.statistics, this.userAnswers)}</span>
+        <span role="button" tabindex="0" class="main-replay">Сыграть ещё раз</span>
+      </section>`;
+    } else {
+      return `<section class="logo" title="Угадай мелодию"><h1>Угадай мелодию</h1></section>
+
+      <h2 class="title">${this.findCurrentTitle()}</h2>
+      <div class="main-stat">${displayResults(this.statistics, this.userAnswers)}</div>
+      <span role="button" tabindex="0" class="main-replay">Попробовать ещё раз</span>
+    </section>`;
+    }
+  }
+
+  bind() {
+    const replayBtn = this.element.querySelector(`.main-replay`);
+
+    const replayHandler = (evt) => {
+      evt.preventDefault();
+      this.onReplayClick();
+    };
+
+    replayBtn.addEventListener(`click`, replayHandler);
+  }
+
+  findCurrentTitle() {
+    if (this.userAnswers.notes <= 0) {
+      return TYPE_TEXT.livesOver.title;
+    } else if (this.userAnswers.time <= 0) {
+      return TYPE_TEXT.timeOver.title;
+    } else {
+      return TYPE_TEXT.win.title;
+    }
+  }
+
+  onReplayClick() {}
+}
 // import artistScreen from "./artist-screen";
 
 /*
@@ -35,7 +101,7 @@ export const livesOverScreen = render(livesOver);
 export const timeOverScreen = render(timesOver);
 
 */
-
+/*
 export default (statistics, userAnswers) => {
   if (userAnswers.notes > 0 && userAnswers.time > 0) {
     return `<section class="main main--result">
@@ -57,3 +123,4 @@ export default (statistics, userAnswers) => {
   </section>`;
   }
 };
+*/
