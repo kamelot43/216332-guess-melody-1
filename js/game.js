@@ -6,178 +6,229 @@ import INITIAL_GAME, {
   USER_ANSWER,
   BASE_RESULT,
   changeResult,
-  resetUserAnswers
+  resetUserAnswers,
 } from "./state";
-import {render, changeScreen} from "./utils/utils";
-import {headerTemplate} from "./header";
-import {artistTemplate} from "./artist-screen";
-import {genreTemplate} from "./genre-screen";
-import levels, {statistics, userAnswers} from "./data/data";
+import {changeScreen, setPauseAndPlay} from "./utils";
+import HeaderView from "./header";
+import ArtistView from "./artist-screen";
+import GenreView from "./genre-screen";
+import levels, {statistics, userAnswers, Result} from "./data/data";
 import calcPoints from "./data/calc-points";
-import resultScreen from "./result-screen";
-import welcomeScreen from "./welcome-screen";
+import ResultView from "./result-screen";
+import WelcomeView from "./welcome-screen";
 
-let game;
-let header;
-let view;
-let baseAnswer = Object.assign({}, USER_ANSWER);
-let baseResult = Object.assign({}, BASE_RESULT);
-
-const startGame = () => {
-  game = Object.assign({}, INITIAL_GAME);
-  header = render(headerTemplate(game));
-  const gameContainerElement = document.createElement(`div`);
-  gameContainerElement.classList.add(`main`);
+class Game {
+  constructor() {
+    this.game = Object.assign({}, INITIAL_GAME);
+    this.header = new HeaderView(this.game);
+    this.baseAnswer = Object.assign({}, USER_ANSWER);
+    this.baseResult = Object.assign({}, BASE_RESULT);
+    this.root = document.createElement(`div`);
+    this.root.classList.add(`main`);
+  }
 
 
-  const renderLevel = () => {
-    gameContainerElement.innerHTML = ``;
-    view.classList.add(`main`);
-    gameContainerElement.appendChild(header);
-    gameContainerElement.appendChild(view);
-    // Кнопка играть снова + обработчик событий
-    const playAgainButton = header.querySelector(`.play-again`);
-    playAgainButton.addEventListener(`click`, () => {
-      changeScreen(welcomeScreen);
-    });
-    changeScreen(gameContainerElement);
-  };
+  init() {
+    this.changelevelType();
+    changeScreen(this.root);
+    this.header.onPlayAgainClick = () => {
+      this.restartGame();
+    };
+  }
 
-  const updateHeader = (state) => {
-    const currentHeader = render(headerTemplate(state));
-    gameContainerElement.replaceChild(currentHeader, header);
-    header = currentHeader;
-  };
+  restartGame() {
+    const welcomeView = new WelcomeView();
+    welcomeView.element.classList.add(`main`);
+    welcomeView.onPlayClick = () => {
+      this.resetState();
+      this.updateHeader();
+      game.init();
+    };
+    changeScreen(welcomeView.element);
+  }
+
+  updateHeader() {
+    const header = new HeaderView(this.game);
+    this.root.replaceChild(header.element, this.header.element);
+    this.header = header;
+    this.header.onPlayAgainClick = () => {
+      this.restartGame();
+    };
+  }
+
   // Расчет результата игры : подсчет очков, вывод экрана победы или поражения
-  const changeGameResult = (gameState, state = true) => {
+  changeGameResult(gameState, state = true) {
     let gameResult;
     const gamePoints = calcPoints(userAnswers, gameState.lives);
     if (!state) {
-      gameResult = changeResult(baseResult, gameState.lives);
+      gameResult = changeResult(this.baseResult, gameState.lives);
     } else {
       gameResult = changeResult(
-          baseResult,
+          this.baseResult,
           gameState.lives,
           undefined,
           gamePoints
       );
     }
-    // gameResult = changeResult(baseResult, game.lives);
-    const result = render(resultScreen(statistics, gameResult));
-    const mainReplayButton = result.querySelector(`.main-replay`);
-    mainReplayButton.addEventListener(`click`, () => {
-      changeScreen(welcomeScreen);
-    });
-    result.classList.add(`main`);
-    changeScreen(result);
-    resetUserAnswers();
-  };
+    this.result = new ResultView(statistics, gameResult);
+    this.result.element.classList.add(`main`);
+    this.result.onReplayClick = () => {
+      this.restartGame();
+    };
+    changeScreen(this.result.element);
+
+  }
 
   // Функция проверки текущего уровня : возможно ли продолжить игру или игра закончена ?
-  const checkLevel = (gameValue) => {
+  checkLevel(gameValue) {
   // .1 Условие , если игру нельзя продолжать
     if (!canContinue(gameValue)) {
-      changeGameResult(gameValue, false);
-    } else if (game.level === INITIAL_GAME.maxLevel) {
-      changeGameResult(gameValue);
+      this.changeGameResult(gameValue, false);
+    } else if (this.game.level === INITIAL_GAME.maxLevel) {
+      this.changeGameResult(gameValue);
     } else {
-      changelevelType();
+      return;
     }
-  };
+  }
 
-  const createArtistGame = () => {
-    const form = document.querySelector(`.main-list`);
+  resetState() {
+    this.game.level = INITIAL_GAME.level;
+    this.game.lives = INITIAL_GAME.lives;
+    this.game.time = INITIAL_GAME.time;
+    resetUserAnswers();
+    return this.game;
+  }
 
-    form.addEventListener(`click`, (evt) => {
-      if (evt.target.classList.contains(`main-answer-r`)) {
-        let answers = [...levels[game.level].answers];
+  createArtistGame() {
+    this.view.onAnswerClick = (evt) => {
+      const answers = [...levels[this.game.level].answers];
 
-        for (let it of answers) {
-          if (it.id === evt.target.value) {
-            const nextLevel = it.next();
-            try {
-              game = changeLevel(game, nextLevel);
-              // Добавить ответ в массив ответов пользователя
-              userAnswers.push(baseAnswer);
-            } catch (e) {
-              game = die(game);
-              // Добавить ответ в массив ответов пользователя
-              const falseAnswer = changeAnswer(baseAnswer, false);
+      for (let answer of answers) {
+
+        if (answer.id === evt.target.value) {
+          switch (answer.result) {
+            case Result.NEXT_LEVEL:
+              this.game = changeLevel(this.game, `level-${+this.game.level.slice(-1) + 1}`);
+              userAnswers.push(this.baseAnswer);
+              this.changelevelType();
+              break;
+            case Result.DIE:
+              this.game = die(this.game);
+              const falseAnswer = changeAnswer(this.baseAnswer, false);
               userAnswers.push(falseAnswer);
-              updateHeader(game);
-            }
-            checkLevel(game);
+              this.updateHeader(this.game);
+              this.checkLevel(this.game);
+              break;
+            case Result.WIN:
+              userAnswers.push(this.baseAnswer);
+              this.checkLevel(this.game);
+              break;
+            case Result.NOOP:
+            // just do nothing
+              break;
+            default:
+              throw new Error(`Unknown result`);
           }
         }
       }
-    });
-  };
-
-  const createGenreGame = () => {
-    const answerBtn = document.querySelector(`.genre-answer-send`);
-    // const playAgainButton = document.querySelector(`.play-again`);
-    const genreForm = document.querySelector(`.genre`);
-    const answers = genreForm.elements.answer;
-
-    answerBtn.disabled = true;
-
-    const isChecked = () => {
-      if ([...answers].some((node) => node.checked)) {
-        answerBtn.disabled = false;
-      } else {
-        answerBtn.disabled = true;
-      }
     };
 
-    genreForm.addEventListener(`click`, (evt) => {
+    this.view.onControlPlayer = (evt) => {
+      evt.preventDefault();
+      setPauseAndPlay(evt);
+    };
+  }
+
+
+  createGenreGame() {
+    this.view.onAnswerClick = (evt) => {
+      const answerBtn = document.querySelector(`.genre-answer-send`);
+      const genreForm = document.querySelector(`.genre`);
+      const answers = genreForm.elements.answer;
+
+      const isChecked = () => {
+        if ([...answers].some((node) => node.checked)) {
+          answerBtn.disabled = false;
+        } else {
+          answerBtn.disabled = true;
+        }
+      };
+      // Возможно блок if можно удалить
       if (evt.target.hasAttribute(`name`)) {
         isChecked();
       }
-    });
+    };
 
-    answerBtn.addEventListener(`click`, (evt) => {
+    this.view.onSubmitClick = (evt) => {
       evt.preventDefault();
+
+      // Избыточное объявление переменных
+      const form = this.view.element.querySelector(`.genre`);
+      const formInputs = form.elements.answer;
+      const result = levels[this.game.level].result;
+
       // все выбранные пользователем кнопки
       // дополнитльное условие : кнопки выбраны с правльным ответом
-      const checkedInputs = [...answers].filter((it) => {
+      const checkedInputs = [...formInputs].filter((it) => {
         return it.checked && it.value === `true`;
       }).length;
 
-      // Выбрать все варианты правилшьных ответов в режиме игры "выбор тректов одного жанра"
-      const audios = [...levels[game.level].audios];
+      // Выбрать все варианты правильных ответов в режиме игры "выбор тректов одного жанра"
+      const audios = [...levels[this.game.level].audios];
       const trueValue = audios.filter((it) => {
         return it.answer === true;
       }).length;
 
       // результат игры в зависимости от ответа пользователя
       if (checkedInputs === trueValue) {
-        let nextLevel = levels[game.level].next();
-        game = changeLevel(game, nextLevel);
-        userAnswers.push(baseAnswer);
+        switch (result) {
+          case Result.NEXT_LEVEL:
+            this.game = changeLevel(this.game, `level-${+this.game.level.slice(-1) + 1}`);
+            userAnswers.push(this.baseAnswer);
+            this.changelevelType();
+            break;
+          case Result.WIN:
+            this.checkLevel(this.game);
+            break;
+          case Result.NOOP:
+            // just do nothing
+            break;
+          default:
+            throw new Error(`Unknown result: ${result}`);
+        }
       } else {
-        game = die(game);
-        const falseAnswer = changeAnswer(baseAnswer, false);
+        this.game = die(this.game);
+        const falseAnswer = changeAnswer(this.baseAnswer, false);
         userAnswers.push(falseAnswer);
-        updateHeader(game);
+        this.updateHeader(this.game);
+        this.checkLevel(this.game);
       }
-      checkLevel(game);
-    });
-  };
+    };
 
-  const changelevelType = () => {
-    if (levels[game.level].type === `artist`) {
-      view = render(artistTemplate(game));
-      renderLevel();
-      createArtistGame();
+    this.view.onControlPlayer = (evt) => {
+      evt.preventDefault();
+      setPauseAndPlay(evt);
+    };
+  }
+
+  changelevelType() {
+    if (levels[this.game.level].type === `artist`) {
+      this.view = new ArtistView(this.game);
+      this.createArtistGame();
+
     } else {
-      view = render(genreTemplate(game));
-      renderLevel();
-      createGenreGame();
+      this.view = new GenreView(this.game);
+      this.createGenreGame();
     }
-    return view;
-  };
+    // возможно этот обработчик событий не на своем месте
 
-  changelevelType();
-};
+    this.view.element.classList.add(`main`);
+    this.root.innerHTML = ``;
+    this.root.appendChild(this.header.element);
+    this.root.appendChild(this.view.element);
+  }
 
-export default startGame;
+}
+
+const game = new Game();
+export default game;

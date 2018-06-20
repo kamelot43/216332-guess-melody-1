@@ -1,6 +1,13 @@
 export let statistics = [4, 5, 8, 10, 11];
 export let userAnswers = [];
 
+export const Result = {
+  NOOP: 0,
+  DIE: 1,
+  WIN: 2,
+  NEXT_LEVEL: 3
+};
+
 export default {
   "level-1": {
     title: `Кто исполняет эту песню ?`,
@@ -17,23 +24,19 @@ export default {
         id: `answer-1`,
         src: ``,
         artist: `Пелагея`,
-        next() {
-          return `level-2`;
-        }
+        result: Result.NEXT_LEVEL
       },
       {
         id: `answer-2`,
         src: ``,
         artist: `Боб Марли`,
-        next() {
-        }
+        result: Result.DIE
       },
       {
         id: `answer-3`,
         src: ``,
         artist: `Kevin MacLeod`,
-        next() {
-        }
+        result: Result.DIE
       }
     ])
   },
@@ -52,23 +55,19 @@ export default {
         id: `answer-1`,
         src: ``,
         artist: `Metalica`,
-        next() {
-          return `level-3`;
-        }
+        result: Result.NEXT_LEVEL
       },
       {
         id: `answer-2`,
         src: ``,
         artist: `Jingle Punks`,
-        next() {
-        }
+        result: Result.DIE
       },
       {
         id: `answer-3`,
         src: ``,
         artist: `Kevin MacLeod`,
-        next() {
-        }
+        result: Result.DIE
       }
     ])
   },
@@ -87,23 +86,19 @@ export default {
         id: `answer-1`,
         src: ``,
         artist: `Дидюля`,
-        next() {
-          return `level-4`;
-        }
+        result: Result.NEXT_LEVEL
       },
       {
         id: `answer-2`,
         src: ``,
         artist: `Audionautix`,
-        next() {
-        }
+        result: Result.DIE
       },
       {
         id: `answer-3`,
         src: ``,
         artist: `Дима Билан`,
-        next() {
-        }
+        result: Result.DIE
       }
     ])
   },
@@ -144,9 +139,7 @@ export default {
         answer: false
       }
     ]),
-    next() {
-      return `level-5`;
-    }
+    result: Result.NEXT_LEVEL
   },
   "level-5": {
     title: `Кто исполняет эту песню ?`,
@@ -163,23 +156,19 @@ export default {
         id: `answer-1`,
         src: ``,
         artist: `Riot`,
-        next() {
-          return `level-6`;
-        }
+        result: Result.NEXT_LEVEL
       },
       {
         id: `answer-2`,
         src: ``,
         artist: `Пелагея`,
-        next() {
-        }
+        result: Result.DIE
       },
       {
         id: `answer-3`,
         src: ``,
         artist: `Иван Дорн`,
-        next() {
-        }
+        result: Result.DIE
       }
     ])
   },
@@ -198,23 +187,19 @@ export default {
         id: `answer-1`,
         src: ``,
         artist: `Пелагея`,
-        next() {
-          return `level-7`;
-        }
+        result: Result.NEXT_LEVEL
       },
       {
         id: `answer-2`,
         src: ``,
         artist: `Боб Марли`,
-        next() {
-        }
+        result: Result.DIE
       },
       {
         id: `answer-3`,
         src: ``,
         artist: `Kevin MacLeod`,
-        next() {
-        }
+        result: Result.DIE
       }
     ])
   },
@@ -233,23 +218,19 @@ export default {
         id: `answer-1`,
         src: ``,
         artist: `Metalica`,
-        next() {
-          return `level-8`;
-        }
+        result: Result.NEXT_LEVEL
       },
       {
         id: `answer-2`,
         src: ``,
         artist: `Jingle Punks`,
-        next() {
-        }
+        result: Result.DIE
       },
       {
         id: `answer-3`,
         src: ``,
         artist: `Kevin MacLeod`,
-        next() {
-        }
+        result: Result.DIE
       }
     ])
   },
@@ -268,23 +249,19 @@ export default {
         id: `answer-1`,
         src: ``,
         artist: `Дидюля`,
-        next() {
-          return `level-9`;
-        }
+        result: Result.NEXT_LEVEL
       },
       {
         id: `answer-2`,
         src: ``,
         artist: `Audionautix`,
-        next() {
-        }
+        result: Result.DIE
       },
       {
         id: `answer-3`,
         src: ``,
         artist: `Дима Билан`,
-        next() {
-        }
+        result: Result.DIE
       }
     ])
   },
@@ -326,9 +303,7 @@ export default {
         answer: false
       }
     ]),
-    next() {
-      return `level-10`;
-    }
+    result: Result.NEXT_LEVEL
 
   },
   "level-10": {
@@ -346,23 +321,19 @@ export default {
         id: `answer-1`,
         src: ``,
         artist: `Riot`,
-        next() {
-          return `level-11`;
-        }
+        result: Result.WIN
       },
       {
         id: `answer-2`,
         src: ``,
         artist: `Пелагея`,
-        next() {
-        }
+        result: Result.DIE
       },
       {
         id: `answer-3`,
         src: ``,
         artist: `Иван Дорн`,
-        next() {
-        }
+        result: Result.DIE
       }
     ])
   }
