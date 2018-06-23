@@ -1,5 +1,6 @@
 import INITIAL_GAME from "./state";
 import AbstractView from "./abstract-view";
+import {timer, transformTime} from "./data/timer";
 
 export default class HeaderView extends AbstractView {
   constructor(game) {
@@ -7,6 +8,8 @@ export default class HeaderView extends AbstractView {
     this.game = game;
   }
   get template() {
+    // ${transformTime(this.game.time).minutes}
+    // ${transformTime(this.game.time).seconds}
     return `<a class="play-again play-again__wrap" href="#">
     <img class="play-again__img" src="/img/melody-logo-ginger.png" alt="logo" width="177" height="76">
   </a>
@@ -17,9 +20,9 @@ export default class HeaderView extends AbstractView {
       style="filter: url(.#blur); transform: rotate(-90deg) scaleY(-1); transform-origin: center"></circle>
 
     <div class="timer-value" xmlns="http://www.w3.org/1999/xhtml">
-      <span class="timer-value-mins">05</span><!--
+      <span class="timer-value-mins">${transformTime(this.game.time).minutes}</span><!--
       --><span class="timer-value-dots">:</span><!--
-      --><span class="timer-value-secs">00</span>
+      --><span class="timer-value-secs">${transformTime(this.game.time).seconds}</span>
     </div>
   </svg>
   <div class="main-mistakes">
