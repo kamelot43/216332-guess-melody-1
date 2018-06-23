@@ -1,4 +1,6 @@
-import INITIAL_GAME from "./state";
+import {INITIAL_GAME, currentAnswer, die, changeLevel} from "./state";
+import {timer} from "./data/timer";
+
 
 class GameModel {
   constructor() {
@@ -10,9 +12,16 @@ class GameModel {
     return this._state;
   }
 
+  get answers() {
+    return this._userAnswers;
+  }
+
   hasNextLevel() {
-    // return getLevel(this._state.level + 1) !== void 0;
     return this._state.level === INITIAL_GAME.maxLevel;
+  }
+
+  checkLevel() {
+    return this.hasNextLevel() || this.isDead();
   }
 
   restart() {
@@ -35,9 +44,14 @@ class GameModel {
     this._userAnswers = [];
   }
 
-  saveUserAnswer(currentAnswer = true, currentTime) {
-    const currentValue = isCorrectAnswer(currentAnswer, currentTime);
+  saveUserAnswers(current = true, currentTime) {
+    const currentValue = currentAnswer(current, currentTime);
     this._userAnswers.push(currentValue);
+  }
+
+  resetUserAnswers() {
+    this._userAnswers.length = 0;
+    return this._userAnswers;
   }
 
   tick() {
@@ -49,7 +63,9 @@ class GameModel {
   }
 
   detectTime() {
-    this._currentTime = this_.game.time;
+    this._currentTime = this._state.time;
   }
 
 }
+
+export default GameModel;

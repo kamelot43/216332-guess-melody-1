@@ -19,12 +19,12 @@ import WelcomeView from "./welcome-screen";
 import {timer} from "./data/timer";
 
 class Game {
-  constructor() {
-    // this.model = model;
-    this.game = Object.assign({}, INITIAL_GAME);
-    this.header = new HeaderView(this.game);
-    this.baseAnswer = Object.assign({}, USER_ANSWER);
-    this.baseResult = Object.assign({}, BASE_RESULT);
+  constructor(model) {
+    this.model = model;
+    // this.game = Object.assign({}, INITIAL_GAME);
+    this.header = new HeaderView(this.model.state);
+    // this.baseAnswer = Object.assign({}, USER_ANSWER);
+    // this.baseResult = Object.assign({}, BASE_RESULT);
     this.root = document.createElement(`div`);
     this.root.classList.add(`main`);
   }
@@ -46,13 +46,13 @@ class Game {
     welcomeView.onPlayClick = () => {
       this.resetState();
       this.updateHeader();
-      game.init();
+      this.init();
     };
     changeScreen(welcomeView.element);
   }
   // Обновить шапку
   updateHeader() {
-    const header = new HeaderView(this.game);
+    const header = new HeaderView(this.model.state);
     this.root.replaceChild(header.element, this.header.element);
     this.header = header;
     this.header.onPlayAgainClick = () => {
@@ -61,36 +61,32 @@ class Game {
   }
 
   // Расчет результата игры : подсчет очков, вывод экрана победы или поражения
-  changeGameResult(gameState, state = true) {
-    let gameResult;
-    const gamePoints = calcPoints(userAnswers, gameState.lives);
-    if (!state) {
-      gameResult = changeResult(this.baseResult, gameState.lives);
-    } else {
-      gameResult = changeResult(
-          this.baseResult,
-          gameState.lives,
-          undefined,
-          gamePoints
-      );
-    }
-    this.result = new ResultView(statistics, gameResult);
+  changeGameResult(gameState) {
+    const gamePoints = calcPoints(this.model.answers, gameState.lives);
+    // console.log(this.model.userAnswers);
+    this._gameResult = changeResult(gameState.lives, gameState.time, gamePoints);
+    this.result = new ResultView(statistics, this._gameResult);
     this.result.element.classList.add(`main`);
     this.result.onReplayClick = () => {
       this.restartGame();
     };
     changeScreen(this.result.element);
-
   }
 
   // Функция проверки текущего уровня : возможно ли продолжить игру или игра закончена ?
   checkLevel(gameValue) {
   // .1 Условие , если игру нельзя продолжать
   // isDead
-    if (!canContinue(gameValue)) {
-      this.changeGameResult(gameValue, false);
+    /* if (!canContinue(gameValue)) {
+      this.changeGameResult(gameValue);
       //  hasNextLevel
     } else if (this.game.level === INITIAL_GAME.maxLevel) {
+      this.changeGameResult(gameValue);
+    } else {
+      this.startTimer();
+      return;
+    }*/
+    if (this.model.checkLevel()) {
       this.changeGameResult(gameValue);
     } else {
       this.startTimer();
@@ -102,34 +98,38 @@ class Game {
     // console.log(this.currentTime);
     this.stopGame();
     let currentAnswer;
-    const difference = this.currentTime - this.game.time;
+    const difference = this.model._currentTime - this.model.state.time;
     // console.log(this.currentTime);
-    switch (answer.result) {
+    switch (answer) {
       case Result.NEXT_LEVEL:
-      // this.model.nextLevel();
-      // this.startGame();
+        this.model.nextLevel();
+        console.log(this.model._userAnswers);
+        // this.startGame();
         // break;
-        this.game = changeLevel(this.game, `level-${+this.game.level.slice(-1) + 1}`);
+        // this.game = changeLevel(this.game, `level-${+this.game.level.slice(-1) + 1}`);
         // this.model.saveUserAnswer();
-        currentAnswer = changeAnswer(true, difference);
-        userAnswers.push(currentAnswer);
+        // currentAnswer = changeAnswer(true, difference);
+        // userAnswers.push(currentAnswer);
+        this.model.saveUserAnswers(true, difference);
+        // console.log(difference);
         this.changelevelType();
         // console.log(this.currentTime - this.game.time);
         this.startTimer();
         break;
       case Result.DIE:
-        // this.model.die();
-        this.game = die(this.game);
+        this.model.die();
+        // this.game = die(this.game);
         // this.model.saveUserAnswer(false);
-        currentAnswer = changeAnswer(false, difference);
-        userAnswers.push(currentAnswer);
-        this.updateHeader(this.game);
-        this.checkLevel(this.game);
+        // currentAnswer = changeAnswer(false, difference);
+        // userAnswers.push(currentAnswer);
+        this.model.saveUserAnswers(false, difference);
+        this.updateHeader();
+        this.checkLevel(this.model.state);
         break;
       case Result.WIN:
       // this.model.saveUserAnswer();
-        userAnswers.push(this.baseAnswer);
-        this.checkLevel(this.game);
+        this.model.saveUserAnswers(true, difference);
+        this.checkLevel(this.model.state);
         break;
       case Result.NOOP:
       // just do nothing
@@ -142,7 +142,8 @@ class Game {
   // тестовая функция
   timer() {
     this.interval = setInterval(() => {
-      this.game = timer(this.game).tick();
+      this.model.tick();
+      // this.game = timer(this.game).tick();
       this.updateHeader();
     }, 1000);
     // return timer(this.game).tick();
@@ -156,27 +157,27 @@ class Game {
     clearInterval(this.interval);
   }
 
-  detectTime() {
+  /* detectTime() {
     this.currentTime = this.game.time;
-  }
+  }*/
 
   startTimer() {
     this.timer();
-    this.detectTime();
+    this.model.detectTime();
   }
 
   resetState() {
-    // this.model.restart();
-    this.game.level = INITIAL_GAME.level;
-    this.game.lives = INITIAL_GAME.lives;
-    this.game.time = INITIAL_GAME.time;
-    resetUserAnswers();
-    return this.game;
+    this.model.restart();
+    // this.game.level = INITIAL_GAME.level;
+    // this.game.lives = INITIAL_GAME.lives;
+    // this.game.time = INITIAL_GAME.time;
+    this.model.resetUserAnswers();
+    // return this.game;
   }
 
   createArtistGame() {
     this.view.onAnswerClick = (evt) => {
-      const answers = [...levels[this.game.level].answers];
+      const answers = [...levels[this.model.state.level].answers];
 
       for (let answer of answers) {
         if (answer.id === evt.target.value) {
@@ -187,7 +188,7 @@ class Game {
           // console.log(this.game);
           // console.log(this.game);
 
-          this.answer(answer);
+          this.answer(answer.result);
           /* switch (answer.result) {
             case Result.NEXT_LEVEL:
             // this.model.nextLevel();
@@ -252,7 +253,7 @@ class Game {
       // Избыточное объявление переменных
       const form = this.view.element.querySelector(`.genre`);
       const formInputs = form.elements.answer;
-      let result = levels[this.game.level].result;
+      let result = levels[this.model.state.level].result;
 
       // все выбранные пользователем кнопки
       // дополнитльное условие : кнопки выбраны с правльным ответом
@@ -261,7 +262,7 @@ class Game {
       }).length;
 
       // Выбрать все варианты правильных ответов в режиме игры "выбор тректов одного жанра"
-      const audios = [...levels[this.game.level].audios];
+      const audios = [...levels[this.model.state.level].audios];
       const trueValue = audios.filter((it) => {
         return it.answer === true;
       }).length;
@@ -271,12 +272,12 @@ class Game {
         if (checkedInputs !== trueValue) {
           result = Result.DIE;
         } else {
-          result = levels[this.game.level].result;
+          result = levels[this.model.state.level].result;
         }
         return result;
       };
 
-      answers(compareAnswers);
+      this.answer(compareAnswers());
 
       // результат игры в зависимости от ответа пользователя
       /* if (checkedInputs === trueValue) {
@@ -313,12 +314,12 @@ class Game {
   }
 
   changelevelType() {
-    if (levels[this.game.level].type === `artist`) {
-      this.view = new ArtistView(this.game);
+    if (levels[this.model.state.level].type === `artist`) {
+      this.view = new ArtistView(this.model.state);
       this.createArtistGame();
 
     } else {
-      this.view = new GenreView(this.game);
+      this.view = new GenreView(this.model.state);
       this.createGenreGame();
     }
     // возможно этот обработчик событий не на своем месте
@@ -332,5 +333,5 @@ class Game {
 
 }
 
-const game = new Game();
-export default game;
+// const game = new Game();
+export default Game;

@@ -25,8 +25,8 @@ export const changeAnswer = (success, time) => {
   return Object.assign({}, USER_ANSWER, {success}, {time});
 };
 
-const isCorrectAnswer = (success = true, time) => {
-  return Object.assign({}, USER_ANSWER, {success}, {time});
+export const currentAnswer = (success = true, time) => {
+  return Object.assign({}, {success}, {time});
 };
 
 export const BASE_RESULT = {
