@@ -45,6 +45,7 @@ export default class GenreView extends AbstractView {
     });
 
     submitBtn.addEventListener(`click`, this.onSubmitClick);
+
     const playerBtns = this.element.querySelectorAll(`.player-control`);
     [...playerBtns].forEach((elem) => {
       elem.addEventListener(`click`, this.onControlPlayer);

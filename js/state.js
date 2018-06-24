@@ -16,26 +16,11 @@ export const Result = {
   NEXT_LEVEL: 3
 };
 
-export const USER_ANSWER = Object.freeze({
-  success: true,
-  time: 35
-});
-
-export const changeAnswer = (success, time) => {
-  return Object.assign({}, USER_ANSWER, {success}, {time});
-};
 
 export const currentAnswer = (success = true, time) => {
   return Object.assign({}, {success}, {time});
 };
 
-export const BASE_RESULT = {
-  notes: 3,
-  time: 35,
-  points: 0
-};
-
-// timer
 
 export const changeResult = (notes, time, points) => {
   return Object.assign({}, {notes}, {time}, {points});

@@ -21,7 +21,7 @@ class GameModel {
   }
 
   checkLevel() {
-    return this.hasNextLevel() || this.isDead();
+    return this.hasNextLevel() || this.isDead() || this.isTimeOut();
   }
 
   restart() {
@@ -30,6 +30,10 @@ class GameModel {
 
   isDead() {
     return this._state.lives <= 0;
+  }
+
+  isTimeOut() {
+    return this._state.time <= 0;
   }
 
   nextLevel() {
@@ -52,6 +56,11 @@ class GameModel {
   resetUserAnswers() {
     this._userAnswers.length = 0;
     return this._userAnswers;
+  }
+
+  resetState() {
+    this.restart();
+    this.resetUserAnswers();
   }
 
   tick() {
