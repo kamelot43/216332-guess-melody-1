@@ -36,6 +36,10 @@ class GameModel {
     return this._state.time <= 0;
   }
 
+  isAlarm() {
+    return this._state.time <= 30;
+  }
+
   nextLevel() {
     this._state = changeLevel(this._state, `level-${+this._state.level.slice(-1) + 1}`);
   }

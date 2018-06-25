@@ -1,15 +1,7 @@
-/* const tick = () => {
-  game = Object.assign({}, game, {
-    time: game.time + 1
-  });
-  updateHeader(game);
-};*/
-
 export const timer = (state) => {
   return {
     time: state.time,
     tick() {
-      // const timer = Object.assign({}, game, {time: game.time + 1});
       if (this.time > 0) {
         const time = this.time - 1;
         return Object.assign({}, state, {time});
@@ -30,4 +22,12 @@ export const transformTime = (time) => {
     minutes,
     seconds
   };
+};
+
+export const timerAlarm = (element) => {
+  const timer = element.querySelector(`.timer`);
+  const circle = element.querySelector(`.timer-line`);
+  circle.classList.add(`timer-line--red`);
+  timer.classList.add(`timer-value`);
+  timer.classList.add(`timer-value--finished`);
 };

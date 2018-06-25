@@ -16,7 +16,7 @@ import levels, {statistics, userAnswers, Result} from "./data/data";
 import calcPoints from "./data/calc-points";
 import ResultView from "./result-screen";
 import WelcomeView from "./welcome-screen";
-import {timer} from "./data/timer";
+import {timer, timerAlarm} from "./data/timer";
 import Router from "./router";
 
 
@@ -52,7 +52,7 @@ class Game {
     const header = new HeaderView(this.model.state);
     this.root.replaceChild(header.element, this.header.element);
     this.header = header;
-    this.time = this.header.element.querySelector(`.timer-value`);
+    this.time = this.header.element.querySelector(`div.timer-value`);
     this.header.onPlayAgainClick = () => {
       Router.showWelcome();
     };
@@ -60,7 +60,7 @@ class Game {
 
   updateTime() {
     const header = new HeaderView(this.model.state);
-    const time = header.element.querySelector(`.timer-value`);
+    const time = header.element.querySelector(`div.timer-value`);
     this.header.element.replaceChild(time, this.time);
     this.time = time;
   }
@@ -128,6 +128,11 @@ class Game {
         this.checkLevel(this.model.state);
         this.stopGame();
         return;
+      } else if (this.model.isAlarm()) {
+        // this.checkLevel(this.model.state);
+        // this.stopGame();
+        timerAlarm(this.header.element);
+        // this.updateHeader();
       }
       this.model.tick();
       // this.updateHeader();
@@ -239,7 +244,7 @@ class Game {
 
     this.view.element.classList.add(`main`);
     this.root.innerHTML = ``;
-    this.time = this.header.element.querySelector(`.timer-value`);
+    this.time = this.header.element.querySelector(`div.timer-value`);
     this.root.appendChild(this.header.element);
     this.root.appendChild(this.view.element);
     changeScreen(this.root);

@@ -8,12 +8,10 @@ export default class HeaderView extends AbstractView {
     this.game = game;
   }
   get template() {
-    // ${transformTime(this.game.time).minutes}
-    // ${transformTime(this.game.time).seconds}
     return `<a class="play-again play-again__wrap" href="#">
     <img class="play-again__img" src="/img/melody-logo-ginger.png" alt="logo" width="177" height="76">
   </a>
-  <svg xmlns="http://www.w3.org/2000/svg" class="timer" viewBox="0 0 780 780">
+  <svg xmlns="http://www.w3.org/2000/svg" class="timer " viewBox="0 0 780 780">
     <circle
       cx="390" cy="390" r="370"
       class="timer-line"
@@ -43,10 +41,3 @@ export default class HeaderView extends AbstractView {
 
   onPlayAgainClick() {}
 }
-
-// const playAgainButton = document.querySelector(`.play-again`);
-
-/* playAgainButton.addEventListener(`click`, () => {
-  // changeScreen(welcomeScreen);
-  console.log(`hello`);
-});*/
