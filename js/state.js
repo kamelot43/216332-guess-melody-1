@@ -4,6 +4,7 @@ export const INITIAL_GAME = Object.freeze({
   level: `level-1`,
   lives: 3,
   maxLevel: `level-10`,
+  time: 300,
   minLives: 0,
   baseTime: 35
 });
@@ -15,23 +16,14 @@ export const Result = {
   NEXT_LEVEL: 3
 };
 
-export const USER_ANSWER = Object.freeze({
-  success: true,
-  time: 35
-});
 
-export const changeAnswer = (base, success, time = INITIAL_GAME.baseTime) => {
-  return Object.assign({}, base, {success}, {time});
+export const currentAnswer = (success = true, time) => {
+  return Object.assign({}, {success}, {time});
 };
 
-export const BASE_RESULT = {
-  notes: 3,
-  time: 35,
-  points: 0
-};
 
-export const changeResult = (base, notes = INITIAL_GAME.lives, time = INITIAL_GAME.baseTime, points) => {
-  return Object.assign({}, base, {notes}, {time}, {points});
+export const changeResult = (notes, time, points) => {
+  return Object.assign({}, {notes}, {time}, {points});
 };
 
 export const getLevel = (state) => levels[`level-${state.level}`];
@@ -65,5 +57,6 @@ export const resetUserAnswers = () => {
   userAnswers.length = 0;
   return userAnswers;
 };
+
 
 export default INITIAL_GAME;

@@ -15,6 +15,10 @@
   width: 100%;
 }
 
+.timer-line--red {
+  stroke: $color-red;
+}
+
 .timer-value {
   color: $color-orange;
   font-size: 2em;
