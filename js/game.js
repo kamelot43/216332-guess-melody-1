@@ -36,18 +36,7 @@ class Game {
       Router.showWelcome();
     };
   }
-  // Перезапустить игру
-  /* restartGame() {
-    const welcomeView = new WelcomeView();
-    welcomeView.element.classList.add(`main`);
-    welcomeView.onPlayClick = () => {
-      this.model.resetState();
-      // this.updateHeader();
-      this.init();
-    };
-    changeScreen(welcomeView.element);
-  }*/
-  // Обновить шапку
+
   updateHeader() {
     const header = new HeaderView(this.model.state);
     this.root.replaceChild(header.element, this.header.element);
@@ -70,14 +59,6 @@ class Game {
     const gamePoints = calcPoints(this.model.answers, gameState.lives);
     this._gameResult = changeResult(gameState.lives, gameState.time, gamePoints);
     Router.showStats(statistics, this._gameResult);
-    // Router.showWelcome();
-    // this.result = new ResultView(statistics, this._gameResult);
-    // this.result.element.classList.add(`main`);
-    /* this.result.onReplayClick = () => {
-      console.log(`hello`);
-      this.restartGame();
-    };*/
-    // changeScreen(this.result.element);
   }
 
   // Функция проверки текущего уровня : возможно ли продолжить игру или игра закончена ?
@@ -129,13 +110,9 @@ class Game {
         this.stopGame();
         return;
       } else if (this.model.isAlarm()) {
-        // this.checkLevel(this.model.state);
-        // this.stopGame();
         timerAlarm(this.header.element);
-        // this.updateHeader();
       }
       this.model.tick();
-      // this.updateHeader();
       this.updateTime();
     }, 1000);
   }
@@ -148,12 +125,6 @@ class Game {
     this.timer();
     this.model.detectTime();
   }
-
-  /* resetState() {
-    this.model.restart();
-    this.model.resetUserAnswers();
-  }*/
-
   createArtistGame() {
     this.view.onAnswerClick = (evt) => {
       const answers = [...levels[this.model.state.level].answers];
