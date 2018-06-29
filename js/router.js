@@ -3,8 +3,27 @@ import WelcomeView from "./welcome-screen";
 import Game from "./game";
 import GameModel from "./game-model";
 import ResultView from "./result-screen";
+import {convertAnswers} from "./data/data";
+
+const checkStatus = (response) => {
+  if (response.status >= 200 && response.status < 300) {
+    return response;
+  } else {
+    throw new Error(`${response.status}: ${response.statusText}`);
+  }
+};
 
 export default class Router {
+
+  static start() {
+    window.fetch(`https://es.dump.academy/guess-melody/questions`).
+      then(checkStatus).
+      then((response) => response.json()).
+      then((data) => convertAnswers(data)).
+      then((data) => this.showGame(data));
+    // catch(Application.showError).
+    // then(() => splash.stop());
+  }
 
   static showWelcome() {
     const welcomeView = new WelcomeView();
@@ -15,14 +34,15 @@ export default class Router {
     changeScreen(welcomeView.element);
 
     welcomeView.onPlayClick = () => {
-      this.showGame();
+      this.start();
       gameModel.resetState();
     };
   }
 
-  static showGame() {
+  static showGame(data) {
     const gameModel = new GameModel();
-    const gameScreen = new Game(gameModel);
+    const gameScreen = new Game(gameModel, data);
+    // console.log(data);
     gameScreen.init();
   }
 

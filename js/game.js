@@ -12,20 +12,30 @@ import {changeScreen, setPauseAndPlay} from "./utils";
 import HeaderView from "./header";
 import ArtistView from "./artist-screen";
 import GenreView from "./genre-screen";
-import levels, {statistics, userAnswers, Result} from "./data/data";
+import {statistics, userAnswers, Result} from "./data/data";
 import calcPoints from "./data/calc-points";
 import ResultView from "./result-screen";
 import WelcomeView from "./welcome-screen";
 import {timer, timerAlarm} from "./data/timer";
 import Router from "./router";
 
+let gameData;
 
 class Game {
-  constructor(model) {
+  constructor(model, data) {
     this.model = model;
+    this.data = data;
     this.header = new HeaderView(this.model.state);
     this.root = document.createElement(`div`);
     this.root.classList.add(`main`);
+  }
+
+  checkStatus(response) {
+    if (response.status >= 200 && response.status < 300) {
+      return response;
+    } else {
+      throw new Error(`${response.status}: ${response.statusText}`);
+    }
   }
 
   // Инициализация и запуск игры
@@ -127,13 +137,11 @@ class Game {
   }
   createArtistGame() {
     this.view.onAnswerClick = (evt) => {
-      const answers = [...levels[this.model.state.level].answers];
+      const answers = [...this.data[this.model.state.level].answers];
+      const currentAnswer = evt.target.value.slice(-1);
+      const isCorrectAnswer = answers[currentAnswer].isCorrect;
 
-      for (let answer of answers) {
-        if (answer.id === evt.target.value) {
-          this.answer(answer.result);
-        }
-      }
+      this.answer(isCorrectAnswer);
     };
 
     this.view.onControlPlayer = (evt) => {
@@ -149,6 +157,19 @@ class Game {
       const answerBtn = this.view.element.querySelector(`.genre-answer-send`);
       const genreForm = this.view.element.querySelector(`.genre`);
       const answers = genreForm.elements.answer;
+      let result = this.data[this.model.state.level].genre;
+      // console.log(result);
+
+      // эксперементальный код
+
+      // Выбрать все варианты правильных ответов в режиме игры "выбор треков одного жанра"
+      const audios = [...this.data[this.model.state.level].answers];
+      // console.log(audios);
+      const trueValue = audios.filter((it) => {
+        return it.genre === result;
+      });
+
+      // console.log(trueValue);
 
       const isChecked = () => {
         if ([...answers].some((node) => node.checked)) {
@@ -169,18 +190,26 @@ class Game {
       // Избыточное объявление переменных
       const genreForm = this.view.element.querySelector(`.genre`);
       const answers = genreForm.elements.answer;
-      let result = levels[this.model.state.level].result;
+      const currentGenre = this.data[this.model.state.level].genre;
+      const audios = [...this.data[this.model.state.level].answers];
+      // console.log(audios);
+
+      // let result = this.data[this.model.state.level].result;
 
       // все выбранные пользователем кнопки
       // дополнитльное условие : кнопки выбраны с правльным ответом
       const checkedInputs = [...answers].filter((it) => {
-        return it.checked && it.value === `true`;
+        return it.checked;
+      }).map((it) => {
+        const currentGenre = it.value.slice(-1);
+        return audios[currentGenre].genre;
+      }).filter((it) => {
+        return it === currentGenre;
       }).length;
 
       // Выбрать все варианты правильных ответов в режиме игры "выбор треков одного жанра"
-      const audios = [...levels[this.model.state.level].audios];
       const trueValue = audios.filter((it) => {
-        return it.answer === true;
+        return it.genre === currentGenre;
       }).length;
 
       const compareAnswers = () => {
@@ -188,7 +217,7 @@ class Game {
         if (checkedInputs !== trueValue) {
           result = Result.DIE;
         } else {
-          result = levels[this.model.state.level].result;
+          result = this.data[this.model.state.level].result;
         }
         return result;
       };
@@ -204,12 +233,12 @@ class Game {
   }
 
   changelevelType() {
-    if (levels[this.model.state.level].type === `artist`) {
-      this.view = new ArtistView(this.model.state);
+    if (this.data[this.model.state.level].type === `artist`) {
+      this.view = new ArtistView(this.model.state, this.data);
       this.createArtistGame();
 
     } else {
-      this.view = new GenreView(this.model.state);
+      this.view = new GenreView(this.model.state, this.data);
       this.createGenreGame();
     }
 

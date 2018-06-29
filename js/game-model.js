@@ -41,7 +41,7 @@ class GameModel {
   }
 
   nextLevel() {
-    this._state = changeLevel(this._state, `level-${+this._state.level.slice(-1) + 1}`);
+    this._state = changeLevel(this._state, this._state.level + 1);
   }
 
   die() {
