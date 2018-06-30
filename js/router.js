@@ -1,8 +1,10 @@
 import {changeScreen} from "./utils";
+import {INITIAL_GAME} from "./state";
 import WelcomeView from "./welcome-screen";
 import Game from "./game";
 import GameModel from "./game-model";
-import ResultView from "./result-screen";
+import ResultView, {TYPE_POINTS} from "./result-screen";
+import ErrorView from "./error-screen";
 import {convertAnswers} from "./data/data";
 
 const checkStatus = (response) => {
@@ -21,14 +23,26 @@ export default class Router {
       then(checkStatus).
       then((response) => response.json()).
       then((data) => convertAnswers(data)).
-      then((data) => this.data = data);
-    // then(() => this.welcomeView.play());
+      then((data) => this.data = data).
+      then(() => INITIAL_GAME.questions.length = 0).
+      then(() => this.data.forEach((el) => INITIAL_GAME.questions.push(el))).
+      then(() => this.welcomeView.play()).
+      catch(this.showError);
+  }
+
+  static playAgain() {
+    const gameModel = new GameModel();
+    this.showWelcome();
+    this.welcomeView.play();
+    this.welcomeView.onPlayClick = () => {
+      this.showGame(INITIAL_GAME.questions);
+      gameModel.resetState();
+    };
   }
 
   static showWelcome() {
     this.welcomeView = new WelcomeView();
     const gameModel = new GameModel();
-    const gameScreen = new Game(gameModel);
 
     this.welcomeView.element.classList.add(`main`);
     changeScreen(this.welcomeView.element);
@@ -38,13 +52,11 @@ export default class Router {
       gameModel.resetState();
     };
 
-    // welcomeView.play();
   }
 
   static showGame(data) {
     const gameModel = new GameModel();
     const gameScreen = new Game(gameModel, data);
-    // console.log(data);
     gameScreen.init();
   }
 
@@ -53,9 +65,20 @@ export default class Router {
     resultScreen.element.classList.add(`main`);
     changeScreen(resultScreen.element);
 
-    resultScreen.onReplayClick = () => {
-      this.showWelcome();
-    };
+    if (gameResult.points == TYPE_POINTS.LOSE) {
+      resultScreen.onReplayClick = () => {
+        this.playAgain();
+      };
+    } else {
+      resultScreen.onReplayClick = () => {
+        this.start();
+      };
+    }
+  }
+
+  static showError(error) {
+    const errorView = new ErrorView(error);
+    errorView.showModal();
   }
 
 }

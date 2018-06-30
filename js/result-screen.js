@@ -14,6 +14,10 @@ const TYPE_TEXT = {
   }
 };
 
+export const TYPE_POINTS = {
+  LOSE: -1,
+};
+
 export default class ResultView extends AbstractView {
   constructor(statistics, userAnswers) {
     super();

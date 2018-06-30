@@ -6,7 +6,8 @@ export const INITIAL_GAME = Object.freeze({
   maxLevel: 10,
   time: 300,
   minLives: 0,
-  baseTime: 35
+  baseTime: 35,
+  questions: []
 });
 
 export const Result = {

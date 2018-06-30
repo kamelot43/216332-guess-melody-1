@@ -16,6 +16,7 @@ import {statistics, userAnswers, Result} from "./data/data";
 import calcPoints from "./data/calc-points";
 import ResultView from "./result-screen";
 import WelcomeView from "./welcome-screen";
+import ConfirmView from "./confirm-screen";
 import {timer, timerAlarm} from "./data/timer";
 import Router from "./router";
 
@@ -30,21 +31,25 @@ class Game {
     this.root.classList.add(`main`);
   }
 
-  checkStatus(response) {
-    if (response.status >= 200 && response.status < 300) {
-      return response;
-    } else {
-      throw new Error(`${response.status}: ${response.statusText}`);
-    }
+  showModal() {
+    this.modalView = new ConfirmView();
+    this.modalView.showModal();
+    this.modalView.onConfirmClick = () => {
+      Router.start();
+      this.modalView.closeModal();
+    };
+    this.modalView.onCloseClick = () => {
+      this.modalView.closeModal();
+    };
   }
+
 
   // Инициализация и запуск игры
   init() {
     this.changelevelType();
     this.startTimer();
-    alert(`hello`);
     this.header.onPlayAgainClick = () => {
-      Router.showWelcome();
+      this.showModal();
     };
   }
 
@@ -54,7 +59,7 @@ class Game {
     this.header = header;
     this.time = this.header.element.querySelector(`div.timer-value`);
     this.header.onPlayAgainClick = () => {
-      Router.showWelcome();
+      this.showModal();
     };
   }
 

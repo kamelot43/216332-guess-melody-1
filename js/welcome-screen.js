@@ -7,7 +7,7 @@ export default class WelcomeView extends AbstractView {
   get template() {
     return `<section class="main main--welcome">
       <section class="logo" title="Угадай мелодию"><h1>Угадай мелодию</h1></section>
-      <button class="main-play"  >Начать игру</button>
+      <button class="main-play"  disabled >Начать игру</button>
       <h2 class="title main-title">Правила игры</h2>
       <p class="text main-text">
         Правила просты&nbsp;— за&nbsp;5 минут ответить на все вопросы.<br>
@@ -17,10 +17,10 @@ export default class WelcomeView extends AbstractView {
     </section>`;
   }
 
-  /* play() {
+  play() {
     this.element.querySelector(`.main-play`).removeAttribute(`disabled`);
     // this.element.querySelector(`.preload-title`).classList.add(`preload-title--hidden`);
-  }*/
+  }
 
   bind() {
     const playButton = this.element.querySelector(`.main-play`);
