@@ -16,27 +16,29 @@ const checkStatus = (response) => {
 export default class Router {
 
   static start() {
+    this.showWelcome();
     window.fetch(`https://es.dump.academy/guess-melody/questions`).
       then(checkStatus).
       then((response) => response.json()).
       then((data) => convertAnswers(data)).
-      then((data) => this.showGame(data));
-    // catch(Application.showError).
-    // then(() => splash.stop());
+      then((data) => this.data = data);
+    // then(() => this.welcomeView.play());
   }
 
   static showWelcome() {
-    const welcomeView = new WelcomeView();
+    this.welcomeView = new WelcomeView();
     const gameModel = new GameModel();
     const gameScreen = new Game(gameModel);
 
-    welcomeView.element.classList.add(`main`);
-    changeScreen(welcomeView.element);
+    this.welcomeView.element.classList.add(`main`);
+    changeScreen(this.welcomeView.element);
 
-    welcomeView.onPlayClick = () => {
-      this.start();
+    this.welcomeView.onPlayClick = () => {
+      this.showGame(this.data);
       gameModel.resetState();
     };
+
+    // welcomeView.play();
   }
 
   static showGame(data) {

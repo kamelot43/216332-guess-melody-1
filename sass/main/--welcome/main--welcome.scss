@@ -36,3 +36,15 @@
 .main-play:active {
   transform: scale(1.04);
 }
+
+.main-play:disabled {
+  animation: pulse 2000ms infinite;
+  border-left-color: lighten($color-orange, 15%);
+  pointer-events: none;
+}
+
+@keyframes pulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}

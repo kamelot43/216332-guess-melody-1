@@ -42,6 +42,7 @@ class Game {
   init() {
     this.changelevelType();
     this.startTimer();
+    alert(`hello`);
     this.header.onPlayAgainClick = () => {
       Router.showWelcome();
     };
@@ -145,8 +146,9 @@ class Game {
     };
 
     this.view.onControlPlayer = (evt) => {
+      const playButtons = this.view.element.querySelectorAll(`.player-control`);
       evt.preventDefault();
-      setPauseAndPlay(evt);
+      setPauseAndPlay(playButtons, evt);
     };
   }
 
@@ -189,6 +191,8 @@ class Game {
 
       // Избыточное объявление переменных
       const genreForm = this.view.element.querySelector(`.genre`);
+      // экспериментальный код !!!!!!!!!!!
+      // const playButtons = this.view.element.querySelectorAnn(`.player-control`);
       const answers = genreForm.elements.answer;
       const currentGenre = this.data[this.model.state.level].genre;
       const audios = [...this.data[this.model.state.level].answers];
@@ -200,7 +204,9 @@ class Game {
       // дополнитльное условие : кнопки выбраны с правльным ответом
       const checkedInputs = [...answers].filter((it) => {
         return it.checked;
-      }).map((it) => {
+      });
+
+      const filterInputs = checkedInputs.map((it) => {
         const currentGenre = it.value.slice(-1);
         return audios[currentGenre].genre;
       }).filter((it) => {
@@ -214,10 +220,10 @@ class Game {
 
       const compareAnswers = () => {
         let result;
-        if (checkedInputs !== trueValue) {
+        if (filterInputs !== trueValue || checkedInputs.length !== trueValue) {
           result = Result.DIE;
         } else {
-          result = this.data[this.model.state.level].result;
+          result = Result.NEXT_LEVEL;
         }
         return result;
       };
@@ -227,8 +233,9 @@ class Game {
     };
 
     this.view.onControlPlayer = (evt) => {
+      const playButtons = this.view.element.querySelectorAll(`.player-control`);
       evt.preventDefault();
-      setPauseAndPlay(evt);
+      setPauseAndPlay(playButtons, evt);
     };
   }
 

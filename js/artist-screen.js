@@ -45,7 +45,11 @@ export default class ArtistView extends AbstractView {
 
     const playerBtn = this.element.querySelector(`.player-control`);
     playerBtn.addEventListener(`click`, this.onControlPlayer);
+
+    playerBtn.previousElementSibling.play();
+    playerBtn.classList.add(`player-control--pause`);
   }
+
 
   onAnswerClick() {}
   onControlPlayer() {}

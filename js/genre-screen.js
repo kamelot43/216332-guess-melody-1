@@ -17,7 +17,7 @@ export default class GenreView extends AbstractView {
     `<div class="genre-answer">
        <div class="player-wrapper">
          <div class="player">
-           <audio src= "" preload></audio>
+           <audio src= "${this.data[this.game.level].answers[idx].src}" preload></audio>
            <button class="player-control"></button>
            <div class="player-track">
              <span class="player-status"></span>
@@ -39,6 +39,10 @@ export default class GenreView extends AbstractView {
     const formInputs = form.elements.answer;
     const submitBtn = this.element.querySelector(`.genre-answer-send`);
     submitBtn.disabled = true;
+    const playButtons = this.element.querySelectorAll(`.player-control`);
+
+    playButtons[0].previousElementSibling.play();
+    playButtons[0].classList.add(`player-control--pause`);
 
 
     [...formInputs].forEach((elem) => {
