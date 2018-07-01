@@ -16,6 +16,14 @@ class GameModel {
     return this._userAnswers;
   }
 
+  get data() {
+    return this._data;
+  }
+
+  saveData(data) {
+    this._data = data;
+  }
+
   hasNextLevel() {
     return this._state.level === INITIAL_GAME.maxLevel;
   }
@@ -62,13 +70,21 @@ class GameModel {
     return this._userAnswers;
   }
 
+  resetQuestions() {
+    INITIAL_GAME.questions.length = 0;
+  }
+
   resetState() {
     this.restart();
     this.resetUserAnswers();
   }
 
   tick() {
-    this._state = timer(this._state).tick();
+    const newTime = timer(this._state.time).tick();
+    // console.log(newTime);
+    this._state = Object.assign({}, this._state, {time: newTime}); // timer(this._state.time).tick();
+    // return this._state.time;
+
   }
 
   findDifference() {

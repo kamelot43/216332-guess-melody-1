@@ -1,6 +1,5 @@
 export const render = (template) => {
   const wrapper = document.createElement(`div`);
-  // wrapper.className = `main`;
   wrapper.innerHTML = template.trim();
   return wrapper;
 };

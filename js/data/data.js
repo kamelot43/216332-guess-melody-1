@@ -17,7 +17,7 @@ export const convertAnswers = (answers) => {
   answers.map((el) => {
     if (el.type === `artist`) {
       el.answers.map((it) => {
-        return it.isCorrect = Server2ResultMapper[it.isCorrect];
+        it.isCorrect = Server2ResultMapper[it.isCorrect];
       });
     }
 

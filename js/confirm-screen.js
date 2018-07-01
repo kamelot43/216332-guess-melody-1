@@ -36,28 +36,23 @@ export default class ConfirmView extends AbstractView {
   onCloseClick() {}
 
   bind() {
-    const modalButtons = Array.from(this.element.querySelectorAll(`.modal-confirm__btn`));
+    const modalButtons = [...this.element.querySelectorAll(`.modal-confirm__btn`)];
     const confirmButton = modalButtons.find((el) => el.textContent === `Ок`);
     const cancelButton = modalButtons.find((el) => el.textContent === `Отмена`);
     const closeButton = this.element.querySelector(`.modal-confirm__close`);
 
     confirmButton.addEventListener(`click`, (evt) => {
       evt.preventDefault();
-      evt.stopPropagation();
       this.onConfirmClick();
     });
 
     cancelButton.addEventListener(`click`, (evt) => {
       evt.preventDefault();
-      evt.stopPropagation();
-
       this.onCloseClick();
     });
 
     closeButton.addEventListener(`click`, (evt) => {
       evt.preventDefault();
-      evt.stopPropagation();
-
       this.onCloseClick();
     });
   }

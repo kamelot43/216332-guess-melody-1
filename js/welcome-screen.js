@@ -1,6 +1,3 @@
-// import {render} from "./utils";
-// import startGame from "./game";
-// import artistScreen from "./artist-screen";
 import AbstractView from "./abstract-view";
 
 export default class WelcomeView extends AbstractView {
@@ -19,7 +16,6 @@ export default class WelcomeView extends AbstractView {
 
   play() {
     this.element.querySelector(`.main-play`).removeAttribute(`disabled`);
-    // this.element.querySelector(`.preload-title`).classList.add(`preload-title--hidden`);
   }
 
   bind() {

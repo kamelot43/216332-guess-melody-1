@@ -1,31 +1,24 @@
-import INITIAL_GAME, {
-  changeLevel,
-  canContinue,
-  die,
-  changeAnswer,
-  USER_ANSWER,
-  BASE_RESULT,
+import {
   changeResult,
-  resetUserAnswers,
 } from "./state";
 import {changeScreen, setPauseAndPlay} from "./utils";
 import HeaderView from "./header";
 import ArtistView from "./artist-screen";
 import GenreView from "./genre-screen";
-import {statistics, userAnswers, Result} from "./data/data";
+import {statistics, Result} from "./data/data";
 import calcPoints from "./data/calc-points";
-import ResultView from "./result-screen";
-import WelcomeView from "./welcome-screen";
 import ConfirmView from "./confirm-screen";
-import {timer, timerAlarm} from "./data/timer";
+import {timerAlarm} from "./data/timer";
 import Router from "./router";
 
-let gameData;
+const QuestionType = {
+  GENRE: `genre`,
+  ARTIST: `artist`
+};
 
 class Game {
-  constructor(model, data) {
+  constructor(model) {
     this.model = model;
-    this.data = data;
     this.header = new HeaderView(this.model.state);
     this.root = document.createElement(`div`);
     this.root.classList.add(`main`);
@@ -74,7 +67,7 @@ class Game {
   changeGameResult(gameState) {
     const gamePoints = calcPoints(this.model.answers, gameState.lives);
     this._gameResult = changeResult(gameState.lives, gameState.time, gamePoints);
-    Router.showStats(statistics, this._gameResult);
+    Router.showStats(statistics, this._gameResult, this.model.answers);
   }
 
   // Функция проверки текущего уровня : возможно ли продолжить игру или игра закончена ?
@@ -90,7 +83,6 @@ class Game {
 
   answer(answer) {
     this.stopGame();
-    let currentAnswer;
     const difference = this.model._currentTime - this.model.state.time;
     switch (answer) {
       case Result.NEXT_LEVEL:
@@ -103,7 +95,6 @@ class Game {
         this.model.die();
         this.model.saveUserAnswers(false, difference);
         this.updateHeader();
-        // this.updateTime();
         this.checkLevel(this.model.state);
         break;
       case Result.WIN:
@@ -141,12 +132,18 @@ class Game {
     this.timer();
     this.model.detectTime();
   }
+
   createArtistGame() {
     this.view.onAnswerClick = (evt) => {
-      const answers = [...this.data[this.model.state.level].answers];
+      const answers = [...this.model.data[this.model.state.level].answers];
       const currentAnswer = evt.target.value.slice(-1);
       const isCorrectAnswer = answers[currentAnswer].isCorrect;
+      // console.log(isCorrectAnswer);
 
+      if (this.model.hasNextLevel() && isCorrectAnswer === Result.NEXT_LEVEL) {
+        this.answer(Result.WIN);
+        return;
+      }
       this.answer(isCorrectAnswer);
     };
 
@@ -164,19 +161,6 @@ class Game {
       const answerBtn = this.view.element.querySelector(`.genre-answer-send`);
       const genreForm = this.view.element.querySelector(`.genre`);
       const answers = genreForm.elements.answer;
-      let result = this.data[this.model.state.level].genre;
-      // console.log(result);
-
-      // эксперементальный код
-
-      // Выбрать все варианты правильных ответов в режиме игры "выбор треков одного жанра"
-      const audios = [...this.data[this.model.state.level].answers];
-      // console.log(audios);
-      const trueValue = audios.filter((it) => {
-        return it.genre === result;
-      });
-
-      // console.log(trueValue);
 
       const isChecked = () => {
         if ([...answers].some((node) => node.checked)) {
@@ -185,6 +169,7 @@ class Game {
           answerBtn.disabled = true;
         }
       };
+
       if (evt.target.hasAttribute(`name`)) {
         isChecked();
       }
@@ -194,26 +179,19 @@ class Game {
     this.view.onSubmitClick = (evt) => {
       evt.preventDefault();
 
-      // Избыточное объявление переменных
       const genreForm = this.view.element.querySelector(`.genre`);
-      // экспериментальный код !!!!!!!!!!!
-      // const playButtons = this.view.element.querySelectorAnn(`.player-control`);
       const answers = genreForm.elements.answer;
-      const currentGenre = this.data[this.model.state.level].genre;
-      const audios = [...this.data[this.model.state.level].answers];
-      // console.log(audios);
-
-      // let result = this.data[this.model.state.level].result;
+      const currentGenre = this.model.data[this.model.state.level].genre;
+      const audios = [...this.model.data[this.model.state.level].answers];
 
       // все выбранные пользователем кнопки
-      // дополнитльное условие : кнопки выбраны с правльным ответом
       const checkedInputs = [...answers].filter((it) => {
         return it.checked;
       });
 
       const filterInputs = checkedInputs.map((it) => {
-        const currentGenre = it.value.slice(-1);
-        return audios[currentGenre].genre;
+        const currentAnswerGenre = it.value.slice(-1);
+        return audios[currentAnswerGenre].genre;
       }).filter((it) => {
         return it === currentGenre;
       }).length;
@@ -233,6 +211,11 @@ class Game {
         return result;
       };
 
+      if (this.model.hasNextLevel() && compareAnswers() === Result.NEXT_LEVEL) {
+        this.answer(Result.WIN);
+        return;
+      }
+
       this.answer(compareAnswers());
 
     };
@@ -245,12 +228,12 @@ class Game {
   }
 
   changelevelType() {
-    if (this.data[this.model.state.level].type === `artist`) {
-      this.view = new ArtistView(this.model.state, this.data);
+    if (this.model.data[this.model.state.level].type === QuestionType.ARTIST) {
+      this.view = new ArtistView(this.model.state, this.model.data);
       this.createArtistGame();
 
     } else {
-      this.view = new GenreView(this.model.state, this.data);
+      this.view = new GenreView(this.model.state, this.model.data);
       this.createGenreGame();
     }
 

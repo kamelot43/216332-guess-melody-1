@@ -3,7 +3,7 @@ import levels, {userAnswers} from "./data/data";
 export const INITIAL_GAME = Object.freeze({
   level: 0,
   lives: 3,
-  maxLevel: 10,
+  maxLevel: 9,
   time: 300,
   minLives: 0,
   baseTime: 35,

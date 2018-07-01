@@ -18,54 +18,53 @@ const checkStatus = (response) => {
 export default class Router {
 
   static start() {
+    this.gameModel = new GameModel();
     this.showWelcome();
     window.fetch(`https://es.dump.academy/guess-melody/questions`).
       then(checkStatus).
       then((response) => response.json()).
       then((data) => convertAnswers(data)).
-      then((data) => this.data = data).
-      then(() => INITIAL_GAME.questions.length = 0).
-      then(() => this.data.forEach((el) => INITIAL_GAME.questions.push(el))).
+      then((data) => this.gameModel.saveData(data)).
+      // then(() => console.log(gameModel.data)).
+      then(() => this.gameModel.resetQuestions()).
+      then(() => this.gameModel.data.forEach((el) => INITIAL_GAME.questions.push(el))).
       then(() => this.welcomeView.play()).
       catch(this.showError);
   }
 
   static playAgain() {
-    const gameModel = new GameModel();
     this.showWelcome();
     this.welcomeView.play();
     this.welcomeView.onPlayClick = () => {
+      this.gameModel.resetState();
       this.showGame(INITIAL_GAME.questions);
-      gameModel.resetState();
     };
   }
 
   static showWelcome() {
     this.welcomeView = new WelcomeView();
-    const gameModel = new GameModel();
 
     this.welcomeView.element.classList.add(`main`);
     changeScreen(this.welcomeView.element);
 
     this.welcomeView.onPlayClick = () => {
-      this.showGame(this.data);
-      gameModel.resetState();
+      this.showGame(this.gameModel.data);
+      this.gameModel.resetState();
     };
 
   }
 
-  static showGame(data) {
-    const gameModel = new GameModel();
-    const gameScreen = new Game(gameModel, data);
+  static showGame() {
+    const gameScreen = new Game(this.gameModel);
     gameScreen.init();
   }
 
-  static showStats(statistics, gameResult) {
-    const resultScreen = new ResultView(statistics, gameResult);
+  static showStats(statistics, gameResult, userAnswers) {
+    const resultScreen = new ResultView(statistics, gameResult, userAnswers);
     resultScreen.element.classList.add(`main`);
     changeScreen(resultScreen.element);
 
-    if (gameResult.points == TYPE_POINTS.LOSE) {
+    if (gameResult.points === TYPE_POINTS.LOSE) {
       resultScreen.onReplayClick = () => {
         this.playAgain();
       };
