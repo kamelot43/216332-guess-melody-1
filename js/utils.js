@@ -1,6 +1,5 @@
 export const render = (template) => {
   const wrapper = document.createElement(`div`);
-  // wrapper.className = `main`;
   wrapper.innerHTML = template.trim();
   return wrapper;
 };
@@ -12,9 +11,17 @@ export const changeScreen = (element) => {
   mainElement.appendChild(element);
 };
 
-export const setPauseAndPlay = (evt) => {
+
+export const setPauseAndPlay = (arrays, evt) => {
   evt.preventDefault();
   const target = evt.target;
+  [...arrays].forEach((it) => {
+    if (it !== target) {
+      it.previousElementSibling.pause();
+      it.classList.remove(`player-control--pause`);
+    }
+  });
+
   if (target.classList.contains(`player-control--pause`)) {
     target.classList.remove(`player-control--pause`);
     target.previousElementSibling.pause();

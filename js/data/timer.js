@@ -1,10 +1,12 @@
-export const timer = (state) => {
+export const timer = (time) => {
   return {
-    time: state.time,
+    time,
     tick() {
       if (this.time > 0) {
-        const time = this.time - 1;
-        return Object.assign({}, state, {time});
+        this.time--;
+        return this.time;
+        // const time = this.time - 1;
+        // return Object.assign({}, state, {time});
       } else {
         return false;
       }
@@ -25,9 +27,9 @@ export const transformTime = (time) => {
 };
 
 export const timerAlarm = (element) => {
-  const timer = element.querySelector(`.timer`);
+  const timerNode = element.querySelector(`.timer`);
   const circle = element.querySelector(`.timer-line`);
   circle.classList.add(`timer-line--red`);
-  timer.classList.add(`timer-value`);
-  timer.classList.add(`timer-value--finished`);
+  timerNode.classList.add(`timer-value`);
+  timerNode.classList.add(`timer-value--finished`);
 };
