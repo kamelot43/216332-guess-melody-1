@@ -2,39 +2,39 @@ import {assert} from 'chai';
 import calcPoints from './calc-points';
 
 const correctAnswers = [
-  {answer: true, time: 31},
-  {answer: true, time: 31},
-  {answer: true, time: 31},
-  {answer: true, time: 31},
-  {answer: true, time: 31},
-  {answer: true, time: 31},
-  {answer: true, time: 31},
-  {answer: true, time: 31},
-  {answer: true, time: 31},
-  {answer: true, time: 31}
+  {success: true, time: 31},
+  {success: true, time: 31},
+  {success: true, time: 31},
+  {success: true, time: 31},
+  {success: true, time: 31},
+  {success: true, time: 31},
+  {success: true, time: 31},
+  {success: true, time: 31},
+  {success: true, time: 31},
+  {success: true, time: 31}
 ];
 
 const incorrectAnswers = [
-  {answer: true, time: 25},
-  {answer: false, time: 25},
-  {answer: false, time: 25},
-  {answer: false, time: 25},
-  {answer: false, time: 25},
-  {answer: true, time: 25},
-  {answer: true, time: 25},
+  {success: true, time: 25},
+  {success: false, time: 25},
+  {success: false, time: 25},
+  {success: false, time: 25},
+  {success: false, time: 25},
+  {success: true, time: 25},
+  {success: true, time: 25},
 ];
 
 const quickCorrectAnswers = [
-  {answer: true, time: 25},
-  {answer: true, time: 25},
-  {answer: true, time: 25},
-  {answer: true, time: 25},
-  {answer: true, time: 25},
-  {answer: true, time: 25},
-  {answer: true, time: 25},
-  {answer: true, time: 25},
-  {answer: true, time: 25},
-  {answer: true, time: 25}
+  {success: true, time: 25},
+  {success: true, time: 25},
+  {success: true, time: 25},
+  {success: true, time: 25},
+  {success: true, time: 25},
+  {success: true, time: 25},
+  {success: true, time: 25},
+  {success: true, time: 25},
+  {success: true, time: 25},
+  {success: true, time: 25}
 ];
 
 

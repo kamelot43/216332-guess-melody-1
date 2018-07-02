@@ -1,5 +1,5 @@
 import {INITIAL_GAME, currentAnswer, die, changeLevel} from "./state";
-import {timer} from "./data/timer";
+import {timer} from "./utils/timer";
 
 
 class GameModel {
@@ -20,9 +20,17 @@ class GameModel {
     return this._data;
   }
 
+  get statistic() {
+    return this._statistic;
+  }
+
 
   saveData(data) {
     this._data = data;
+  }
+
+  saveStatistic(data) {
+    this._statistic = data;
   }
 
   transformStatistic(data) {

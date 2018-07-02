@@ -52,11 +52,12 @@ export default class Router {
     if (gameResult.points === TYPE_POINTS.LOSE || gameResult.time === TYPE_POINTS.TIMEOUT) {
       this.showResult(null, gameResult, userAnswers);
     } else {
-      const result = convertResult(gameResult);
-      Loader.saveResults(result);
       Loader.loadResults().
       then((data) => this.gameModel.transformStatistic(data)).
-      then((data) => this.showResult(data, gameResult, userAnswers));
+      then((data) => this.gameModel.saveStatistic(data)).
+      then(() => this.showResult(this.gameModel.statistic, gameResult, userAnswers));
+      const result = convertResult(gameResult);
+      Loader.saveResults(result);
     }
   }
 

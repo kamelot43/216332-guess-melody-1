@@ -1,6 +1,6 @@
 import INITIAL_GAME from "./state";
-import displayResults from "./data/display-results";
-import {quickAnswers} from "./data/calc-points";
+import displayResults from "./utils/display-results";
+import {quickAnswers} from "./utils/calc-points";
 import AbstractView from "./abstract-view";
 
 const TYPE_TEXT = {

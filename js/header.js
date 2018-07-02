@@ -1,6 +1,6 @@
 import INITIAL_GAME from "./state";
 import AbstractView from "./abstract-view";
-import {transformTime} from "./data/timer";
+import {transformTime} from "./utils/timer";
 
 export default class HeaderView extends AbstractView {
   constructor(game) {

@@ -4,9 +4,9 @@ import HeaderView from "./header";
 import ArtistView from "./artist-screen";
 import GenreView from "./genre-screen";
 import {Result} from "./data/data";
-import calcPoints from "./data/calc-points";
+import calcPoints from "./utils/calc-points";
 import ConfirmView from "./confirm-screen";
-import {timerAlarm} from "./data/timer";
+import {timerAlarm} from "./utils/timer";
 import Router from "./router";
 
 const QuestionType = {
