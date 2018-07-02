@@ -1,5 +1,5 @@
-import {assert} from 'chai';
-import {timer} from './timer';
+import {assert} from "chai";
+import {timer} from "./timer";
 
 describe(`timer`, () => {
   it(`should return right time`, () => {

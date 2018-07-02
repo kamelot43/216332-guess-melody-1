@@ -1,4 +1,4 @@
-import {render} from "./utils";
+import {render} from "../utils/utils";
 
 export default class AbstractView {
   constructor() {

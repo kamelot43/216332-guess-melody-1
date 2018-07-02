@@ -11,7 +11,6 @@ export const changeScreen = (element) => {
   mainElement.appendChild(element);
 };
 
-
 export const setPauseAndPlay = (arrays, evt) => {
   evt.preventDefault();
   const target = evt.target;
@@ -29,5 +28,4 @@ export const setPauseAndPlay = (arrays, evt) => {
     target.classList.add(`player-control--pause`);
     target.previousElementSibling.play();
   }
-
 };

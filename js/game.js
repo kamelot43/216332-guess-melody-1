@@ -1,18 +1,13 @@
 import {changeResult} from "./state";
-import {changeScreen, setPauseAndPlay} from "./utils";
-import HeaderView from "./header";
-import ArtistView from "./artist-screen";
-import GenreView from "./genre-screen";
-import {Result} from "./data/data";
+import {changeScreen, setPauseAndPlay} from "./utils/utils";
+import HeaderView from "./views/header";
+import ArtistView from "./views/artist-screen";
+import GenreView from "./views/genre-screen";
+import {Result, QuestionType} from "./data/data";
 import calcPoints from "./utils/calc-points";
-import ConfirmView from "./confirm-screen";
+import ConfirmView from "./views/confirm-screen";
 import {timerAlarm} from "./utils/timer";
 import Router from "./router";
-
-const QuestionType = {
-  GENRE: `genre`,
-  ARTIST: `artist`
-};
 
 class Game {
   constructor(model) {
@@ -60,14 +55,23 @@ class Game {
     this.time = time;
   }
 
-
   convertResult(notes, time, score) {
-    return Object.assign({}, {score}, {time}, {notes}, {date: new Date()});
+    return Object.assign(
+        {},
+        {score},
+        {time},
+        {notes},
+        {date: new Date()}
+    );
   }
 
   changeGameResult(gameState) {
     const gamePoints = calcPoints(this.model.answers, gameState.lives);
-    this._gameResult = changeResult(gameState.lives, gameState.time, gamePoints);
+    this._gameResult = changeResult(
+        gameState.lives,
+        gameState.time,
+        gamePoints
+    );
     Router.showStats(this._gameResult, this.model.answers);
   }
 
@@ -102,7 +106,7 @@ class Game {
         this.checkLevel(this.model.state);
         break;
       case Result.NOOP:
-      // just do nothing
+        // just do nothing
         break;
       default:
         throw new Error(`Unknown result`);
@@ -151,9 +155,7 @@ class Game {
     };
   }
 
-
   createGenreGame() {
-
     this.view.onAnswerClick = (evt) => {
       const answerBtn = this.view.element.querySelector(`.genre-answer-send`);
       const genreForm = this.view.element.querySelector(`.genre`);
@@ -172,7 +174,6 @@ class Game {
       }
     };
 
-
     this.view.onSubmitClick = (evt) => {
       evt.preventDefault();
 
@@ -185,13 +186,14 @@ class Game {
         return it.checked;
       });
 
-      const filterInputs = checkedInputs.map((it) => {
-        const currentAnswerGenre = it.value.slice(-1);
-        return audios[currentAnswerGenre].genre;
-      }).filter((it) => {
-        return it === currentGenre;
-      }).length;
-
+      const filterInputs = checkedInputs
+        .map((it) => {
+          const currentAnswerGenre = it.value.slice(-1);
+          return audios[currentAnswerGenre].genre;
+        })
+        .filter((it) => {
+          return it === currentGenre;
+        }).length;
 
       const trueValue = audios.filter((it) => {
         return it.genre === currentGenre;
@@ -213,7 +215,6 @@ class Game {
       }
 
       this.answer(compareAnswers());
-
     };
 
     this.view.onControlPlayer = (evt) => {
@@ -227,7 +228,6 @@ class Game {
     if (this.model.data[this.model.state.level].type === QuestionType.ARTIST) {
       this.view = new ArtistView(this.model.state, this.model.data);
       this.createArtistGame();
-
     } else {
       this.view = new GenreView(this.model.state, this.model.data);
       this.createGenreGame();
@@ -240,7 +240,6 @@ class Game {
     this.root.appendChild(this.view.element);
     changeScreen(this.root);
   }
-
 }
 
 export default Game;

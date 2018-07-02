@@ -1,6 +1,6 @@
-import INITIAL_GAME from "./state";
-import displayResults from "./utils/display-results";
-import {quickAnswers} from "./utils/calc-points";
+import INITIAL_GAME from "../state";
+import displayResults from "../utils/display-results";
+import {quickAnswers} from "../utils/calc-points";
 import AbstractView from "./abstract-view";
 
 const TYPE_TEXT = {
@@ -35,16 +35,25 @@ export default class ResultView extends AbstractView {
 
         <h2 class="title">${this.findCurrentTitle()}</h2>
         <div class="main-stat">За&nbsp;3&nbsp;минуты и 25&nbsp;секунд
-          <br>вы&nbsp;набрали ${this.gameResult.points} баллов (${quickAnswers(this.userAnswers)} быстрых)
-          <br>совершив ${INITIAL_GAME.lives - this.gameResult.notes} ошибки</div>
-        <span class="main-comparison">${displayResults(this.statistics, this.gameResult)}</span>
+          <br>вы&nbsp;набрали ${this.gameResult.points} баллов (${quickAnswers(
+    this.userAnswers
+)} быстрых)
+          <br>совершив ${INITIAL_GAME.lives -
+            this.gameResult.notes} ошибки</div>
+        <span class="main-comparison">${displayResults(
+      this.statistics,
+      this.gameResult
+  )}</span>
         <span role="button" tabindex="0" class="main-replay">Сыграть ещё раз</span>
       </section>`;
     } else {
       return `<section class="logo" title="Угадай мелодию"><h1>Угадай мелодию</h1></section>
 
       <h2 class="title">${this.findCurrentTitle()}</h2>
-      <div class="main-stat">${displayResults(this.statistics, this.gameResult)}</div>
+      <div class="main-stat">${displayResults(
+      this.statistics,
+      this.gameResult
+  )}</div>
       <span role="button" tabindex="0" class="main-replay">Попробовать ещё раз</span>
     </section>`;
     }

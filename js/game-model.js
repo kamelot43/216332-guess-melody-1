@@ -1,7 +1,6 @@
 import {INITIAL_GAME, currentAnswer, die, changeLevel} from "./state";
 import {timer} from "./utils/timer";
 
-
 class GameModel {
   constructor() {
     this.restart();
@@ -23,7 +22,6 @@ class GameModel {
   get statistic() {
     return this._statistic;
   }
-
 
   saveData(data) {
     this._data = data;
@@ -97,7 +95,6 @@ class GameModel {
   tick() {
     const newTime = timer(this._state.time).tick();
     this._state = Object.assign({}, this._state, {time: newTime});
-
   }
 
   findDifference() {
@@ -107,7 +104,6 @@ class GameModel {
   detectTime() {
     this._currentTime = this._state.time;
   }
-
 }
 
 export default GameModel;

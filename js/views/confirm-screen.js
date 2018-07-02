@@ -1,4 +1,4 @@
-import AbstractView from './abstract-view';
+import AbstractView from "./abstract-view";
 
 const body = document.querySelector(`body`);
 
@@ -36,7 +36,9 @@ export default class ConfirmView extends AbstractView {
   onCloseClick() {}
 
   bind() {
-    const modalButtons = [...this.element.querySelectorAll(`.modal-confirm__btn`)];
+    const modalButtons = [
+      ...this.element.querySelectorAll(`.modal-confirm__btn`)
+    ];
     const confirmButton = modalButtons.find((el) => el.textContent === `Ок`);
     const cancelButton = modalButtons.find((el) => el.textContent === `Отмена`);
     const closeButton = this.element.querySelector(`.modal-confirm__close`);

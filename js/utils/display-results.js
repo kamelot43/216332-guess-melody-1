@@ -1,5 +1,4 @@
 const displayResults = (statistics, player) => {
-
   if (player.notes <= 0) {
     return `У вас закончились все попытки. Ничего, повезёт в следующий раз!`;
   } else if (player.time <= 0) {
@@ -12,9 +11,8 @@ const displayResults = (statistics, player) => {
   });
   const position = newArray.indexOf(player.points) + 1;
   const players = newArray.length;
-  const percent = Math.floor(((players - position) / players) * 100) + `%`;
+  const percent = Math.floor((players - position) / players * 100) + `%`;
   return `Вы заняли ${position} место из ${players} игроков. Это лучше, чем у ${percent} игроков`;
-
 };
 
 export default displayResults;

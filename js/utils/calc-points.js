@@ -28,7 +28,6 @@ const calcPoints = (arr, notes) => {
     } else if (it.success === false) {
       points -= BASE_VALUE.falseAnswer;
     }
-
   });
   return points;
 };

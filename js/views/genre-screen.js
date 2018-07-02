@@ -1,4 +1,3 @@
-// import levels from "./data/data";
 import AbstractView from "./abstract-view";
 
 export default class GenreView extends AbstractView {
@@ -13,11 +12,15 @@ export default class GenreView extends AbstractView {
   <div class="main-wrap">
     <h2 class="title">${this.data[this.game.level].question}</h2>
     <form class="genre">
-    ${[...this.data[this.game.level].answers].map((it, idx) =>
-    `<div class="genre-answer">
+    ${[...this.data[this.game.level].answers]
+      .map(
+          (it, idx) =>
+            `<div class="genre-answer">
        <div class="player-wrapper">
          <div class="player">
-           <audio src= "${this.data[this.game.level].answers[idx].src}" preload></audio>
+           <audio src= "${
+  this.data[this.game.level].answers[idx].src
+}" preload></audio>
            <button class="player-control"></button>
            <div class="player-track">
              <span class="player-status"></span>
@@ -26,7 +29,9 @@ export default class GenreView extends AbstractView {
        </div>
        <input type="checkbox" name="answer" value="answer-${idx}" id="a-${idx}">
        <label class="genre-answer-check" for="a-${idx}"></label>
-     </div>`).join(``)}
+     </div>`
+      )
+      .join(``)}
 
       <button class="genre-answer-send" type="submit">Ответить</button>
     </form>
@@ -44,7 +49,6 @@ export default class GenreView extends AbstractView {
     playButtons[0].previousElementSibling.play();
     playButtons[0].classList.add(`player-control--pause`);
 
-
     [...formInputs].forEach((elem) => {
       elem.addEventListener(`change`, this.onAnswerClick);
     });
@@ -55,7 +59,6 @@ export default class GenreView extends AbstractView {
     [...playerBtns].forEach((elem) => {
       elem.addEventListener(`click`, this.onControlPlayer);
     });
-
   }
 
   onAnswerClick() {}
@@ -63,5 +66,4 @@ export default class GenreView extends AbstractView {
   onSubmitClick() {}
 
   onControlPlayer() {}
-
 }

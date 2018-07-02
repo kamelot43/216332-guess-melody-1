@@ -1,4 +1,3 @@
-// import levels from "./data/data";
 import AbstractView from "./abstract-view";
 
 export default class ArtistView extends AbstractView {
@@ -22,22 +21,25 @@ export default class ArtistView extends AbstractView {
         </div>
         <form class="main-list">
 
-          ${[...this.data[this.game.level].answers].map((it, idx) =>
-    ` <div class="main-answer-wrapper">
+          ${[...this.data[this.game.level].answers]
+            .map(
+                (it, idx) =>
+                  ` <div class="main-answer-wrapper">
                <input class="main-answer-r" type="radio" id="answer-${idx}" name="answer" value="val-${idx}"/>
                <label class="main-answer" for="answer-${idx}">
                  <img class="main-answer-preview" src="${it.image.url}"
                       alt="Пелагея" width="134" height="134">
                  ${it.title}
                </label>
-             </div>`).join(``)}
+             </div>`
+            )
+            .join(``)}
         </form>
       </div>
     </section>`;
   }
 
   bind() {
-
     const artistAnswers = this.element.querySelectorAll(`.main-answer-r`);
     [...artistAnswers].forEach((elem) => {
       elem.addEventListener(`change`, this.onAnswerClick);
@@ -49,7 +51,6 @@ export default class ArtistView extends AbstractView {
     playerBtn.previousElementSibling.play();
     playerBtn.classList.add(`player-control--pause`);
   }
-
 
   onAnswerClick() {}
   onControlPlayer() {}

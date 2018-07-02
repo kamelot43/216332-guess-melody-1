@@ -5,6 +5,11 @@ export const Result = {
   NEXT_LEVEL: 3
 };
 
+export const QuestionType = {
+  GENRE: `genre`,
+  ARTIST: `artist`
+};
+
 const Server2ResultMapper = {
   'false': Result.DIE,
   'true': Result.NEXT_LEVEL
@@ -12,7 +17,7 @@ const Server2ResultMapper = {
 
 const convertAnswers = (answers) => {
   answers.map((el) => {
-    if (el.type === `artist`) {
+    if (el.type === QuestionType.ARTIST) {
       el.answers.map((it) => {
         it.isCorrect = Server2ResultMapper[it.isCorrect];
       });

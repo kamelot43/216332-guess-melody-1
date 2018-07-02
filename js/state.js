@@ -15,11 +15,9 @@ export const Result = {
   NEXT_LEVEL: 3
 };
 
-
 export const currentAnswer = (success = true, time) => {
   return Object.assign({}, {success}, {time});
 };
-
 
 export const changeResult = (notes, time, points) => {
   return Object.assign({}, {notes}, {time}, {points});
@@ -27,14 +25,19 @@ export const changeResult = (notes, time, points) => {
 
 export const convertResult = (object) => {
   const date = new Date();
-  return Object.assign({}, {score: object.points}, {time: object.time}, {notes: object.notes}, {date: date.getTime()});
+  return Object.assign(
+      {},
+      {score: object.points},
+      {time: object.time},
+      {notes: object.notes},
+      {date: date.getTime()}
+  );
 };
 
 export const changeLevel = (game, level) => {
   if (level === undefined) {
     throw new Error(`Level should be of type number`);
   }
-
 
   return Object.assign({}, game, {
     level
@@ -54,6 +57,5 @@ export const die = (game) => {
     lives
   });
 };
-
 
 export default INITIAL_GAME;
