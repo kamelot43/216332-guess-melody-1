@@ -1,35 +1,27 @@
 import {changeScreen} from "./utils";
-import {INITIAL_GAME} from "./state";
+import {INITIAL_GAME, convertResult} from "./state";
 import WelcomeView from "./welcome-screen";
 import Game from "./game";
 import GameModel from "./game-model";
 import ResultView, {TYPE_POINTS} from "./result-screen";
 import ErrorView from "./error-screen";
-import {convertAnswers} from "./data/data";
+import Loader from "./loader";
+import convertAnswers from "./data/data";
 
-const checkStatus = (response) => {
-  if (response.status >= 200 && response.status < 300) {
-    return response;
-  } else {
-    throw new Error(`${response.status}: ${response.statusText}`);
-  }
-};
+const SERVER_URL = `https://es.dump.academy/guess-melody/`;
+const APP_ID = 22101985;
 
 export default class Router {
 
   static start() {
     this.gameModel = new GameModel();
     this.showWelcome();
-    window.fetch(`https://es.dump.academy/guess-melody/questions`).
-      then(checkStatus).
-      then((response) => response.json()).
-      then((data) => convertAnswers(data)).
-      then((data) => this.gameModel.saveData(data)).
-      // then(() => console.log(gameModel.data)).
-      then(() => this.gameModel.resetQuestions()).
-      then(() => this.gameModel.data.forEach((el) => INITIAL_GAME.questions.push(el))).
-      then(() => this.welcomeView.play()).
-      catch(this.showError);
+    Loader.loadData().
+    then((data) => this.gameModel.saveData(data)).
+    then(() => this.gameModel.resetQuestions()).
+    then(() => this.gameModel.data.forEach((el) => INITIAL_GAME.questions.push(el))).
+    then(() => this.welcomeView.play()).
+    catch(this.showError);
   }
 
   static playAgain() {
@@ -59,25 +51,31 @@ export default class Router {
     gameScreen.init();
   }
 
-  static showStats(statistics, gameResult, userAnswers) {
-    const resultScreen = new ResultView(statistics, gameResult, userAnswers);
-    resultScreen.element.classList.add(`main`);
-    changeScreen(resultScreen.element);
+  static showStats(gameResult, userAnswers) {
 
-    if (gameResult.points === TYPE_POINTS.LOSE) {
-      resultScreen.onReplayClick = () => {
-        this.playAgain();
-      };
+    if (gameResult.points === TYPE_POINTS.LOSE || gameResult.time === TYPE_POINTS.TIMEOUT) {
+      this.showResult(null, gameResult, userAnswers);
     } else {
-      resultScreen.onReplayClick = () => {
-        this.start();
-      };
+      const result = convertResult(gameResult);
+      Loader.saveResults(result);
+      Loader.loadResults().
+      then((data) => this.gameModel.transformStatistic(data)).
+      then((data) => this.showResult(data, gameResult, userAnswers));
     }
   }
 
   static showError(error) {
     const errorView = new ErrorView(error);
     errorView.showModal();
+  }
+
+  static showResult(statistic = [], gameResult, userAnswers) {
+    this.resultScreen = new ResultView(statistic, gameResult, userAnswers);
+    this.resultScreen.element.classList.add(`main`);
+    changeScreen(this.resultScreen.element);
+    this.resultScreen.onReplayClick = () => {
+      this.start();
+    };
   }
 
 }

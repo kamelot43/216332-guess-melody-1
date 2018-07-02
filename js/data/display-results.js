@@ -5,7 +5,7 @@ const displayResults = (statistics, player) => {
   } else if (player.time <= 0) {
     return `Время вышло! <br> Вы не успели отгадать все мелодии`;
   }
-  statistics.push(player.points);
+
   const newArray = [...statistics];
   newArray.sort((a, b) => {
     return b - a;

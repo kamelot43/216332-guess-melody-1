@@ -1,6 +1,4 @@
-import {
-  changeResult,
-} from "./state";
+import {changeResult, convertResult} from "./state";
 import {changeScreen, setPauseAndPlay} from "./utils";
 import HeaderView from "./header";
 import ArtistView from "./artist-screen";
@@ -62,12 +60,18 @@ class Game {
     this.header.element.replaceChild(time, this.time);
     this.time = time;
   }
+  // эксперемент
+
+  convertResult(notes, time, score) {
+    return Object.assign({}, {score}, {time}, {notes}, {date: new Date()});
+  }
 
   // Расчет результата игры : подсчет очков, вывод экрана победы или поражения
   changeGameResult(gameState) {
     const gamePoints = calcPoints(this.model.answers, gameState.lives);
     this._gameResult = changeResult(gameState.lives, gameState.time, gamePoints);
-    Router.showStats(statistics, this._gameResult, this.model.answers);
+    // console.log(this._gameResult);
+    Router.showStats(this._gameResult, this.model.answers);
   }
 
   // Функция проверки текущего уровня : возможно ли продолжить игру или игра закончена ?
@@ -138,7 +142,6 @@ class Game {
       const answers = [...this.model.data[this.model.state.level].answers];
       const currentAnswer = evt.target.value.slice(-1);
       const isCorrectAnswer = answers[currentAnswer].isCorrect;
-      // console.log(isCorrectAnswer);
 
       if (this.model.hasNextLevel() && isCorrectAnswer === Result.NEXT_LEVEL) {
         this.answer(Result.WIN);

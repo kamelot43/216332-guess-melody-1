@@ -1,4 +1,4 @@
-import levels, {userAnswers} from "./data/data";
+import levels from "./data/data";
 
 export const INITIAL_GAME = Object.freeze({
   level: 0,
@@ -27,7 +27,10 @@ export const changeResult = (notes, time, points) => {
   return Object.assign({}, {notes}, {time}, {points});
 };
 
-export const getLevel = (state) => levels[`level-${state.level}`];
+export const convertResult = (object) => {
+  const date = new Date();
+  return Object.assign({}, {score: object.points}, {time: object.time}, {notes: object.notes}, {date: date.getTime()});
+};
 
 export const changeLevel = (game, level) => {
   if (level === undefined) {

@@ -20,8 +20,15 @@ class GameModel {
     return this._data;
   }
 
+
   saveData(data) {
     this._data = data;
+  }
+
+  transformStatistic(data) {
+    return [...data].map((it) => {
+      return it.score;
+    });
   }
 
   hasNextLevel() {
@@ -81,9 +88,7 @@ class GameModel {
 
   tick() {
     const newTime = timer(this._state.time).tick();
-    // console.log(newTime);
-    this._state = Object.assign({}, this._state, {time: newTime}); // timer(this._state.time).tick();
-    // return this._state.time;
+    this._state = Object.assign({}, this._state, {time: newTime});
 
   }
 

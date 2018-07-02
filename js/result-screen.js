@@ -17,6 +17,7 @@ const TYPE_TEXT = {
 
 export const TYPE_POINTS = {
   LOSE: -1,
+  TIMEOUT: 0
 };
 
 export default class ResultView extends AbstractView {
