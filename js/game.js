@@ -1,9 +1,9 @@
-import {changeResult, convertResult} from "./state";
+import {changeResult} from "./state";
 import {changeScreen, setPauseAndPlay} from "./utils";
 import HeaderView from "./header";
 import ArtistView from "./artist-screen";
 import GenreView from "./genre-screen";
-import {statistics, Result} from "./data/data";
+import {Result} from "./data/data";
 import calcPoints from "./data/calc-points";
 import ConfirmView from "./confirm-screen";
 import {timerAlarm} from "./data/timer";
@@ -34,7 +34,6 @@ class Game {
     };
   }
 
-
   // Инициализация и запуск игры
   init() {
     this.changelevelType();
@@ -60,21 +59,18 @@ class Game {
     this.header.element.replaceChild(time, this.time);
     this.time = time;
   }
-  // эксперемент
+
 
   convertResult(notes, time, score) {
     return Object.assign({}, {score}, {time}, {notes}, {date: new Date()});
   }
 
-  // Расчет результата игры : подсчет очков, вывод экрана победы или поражения
   changeGameResult(gameState) {
     const gamePoints = calcPoints(this.model.answers, gameState.lives);
     this._gameResult = changeResult(gameState.lives, gameState.time, gamePoints);
-    // console.log(this._gameResult);
     Router.showStats(this._gameResult, this.model.answers);
   }
 
-  // Функция проверки текущего уровня : возможно ли продолжить игру или игра закончена ?
   checkLevel(gameValue) {
     if (this.model.checkLevel()) {
       this.changeGameResult(gameValue);
@@ -112,8 +108,6 @@ class Game {
         throw new Error(`Unknown result`);
     }
   }
-
-  // инициализация таймера
   timer() {
     this.interval = setInterval(() => {
       if (this.model.isTimeOut()) {
@@ -187,7 +181,6 @@ class Game {
       const currentGenre = this.model.data[this.model.state.level].genre;
       const audios = [...this.model.data[this.model.state.level].answers];
 
-      // все выбранные пользователем кнопки
       const checkedInputs = [...answers].filter((it) => {
         return it.checked;
       });
@@ -199,7 +192,7 @@ class Game {
         return it === currentGenre;
       }).length;
 
-      // Выбрать все варианты правильных ответов в режиме игры "выбор треков одного жанра"
+
       const trueValue = audios.filter((it) => {
         return it.genre === currentGenre;
       }).length;

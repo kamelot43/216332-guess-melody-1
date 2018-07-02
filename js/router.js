@@ -6,10 +6,6 @@ import GameModel from "./game-model";
 import ResultView, {TYPE_POINTS} from "./result-screen";
 import ErrorView from "./error-screen";
 import Loader from "./loader";
-import convertAnswers from "./data/data";
-
-const SERVER_URL = `https://es.dump.academy/guess-melody/`;
-const APP_ID = 22101985;
 
 export default class Router {
 
