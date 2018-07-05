@@ -1,4 +1,4 @@
-import convertAnswers from "./data/data";
+import {convertAnswers} from "./state";
 
 const checkStatus = (response) => {
   if (response.status >= 200 && response.status < 300) {

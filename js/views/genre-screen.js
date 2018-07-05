@@ -18,9 +18,7 @@ export default class GenreView extends AbstractView {
             `<div class="genre-answer">
        <div class="player-wrapper">
          <div class="player">
-           <audio src= "${
-  this.data[this.game.level].answers[idx].src
-}" preload></audio>
+           <audio src= "${it.src}" preload></audio>
            <button class="player-control"></button>
            <div class="player-track">
              <span class="player-status"></span>

@@ -11,21 +11,23 @@ export const changeScreen = (element) => {
   mainElement.appendChild(element);
 };
 
+const toggleState = (element) => {
+  if (element.classList.contains(`player-control--pause`)) {
+    element.previousElementSibling.play();
+  } else {
+    element.previousElementSibling.pause();
+  }
+};
+
 export const setPauseAndPlay = (arrays, evt) => {
   evt.preventDefault();
   const target = evt.target;
-  [...arrays].forEach((it) => {
-    if (it !== target) {
-      it.previousElementSibling.pause();
-      it.classList.remove(`player-control--pause`);
-    }
-  });
 
-  if (target.classList.contains(`player-control--pause`)) {
-    target.classList.remove(`player-control--pause`);
-    target.previousElementSibling.pause();
-  } else {
-    target.classList.add(`player-control--pause`);
-    target.previousElementSibling.play();
-  }
+  [...arrays].forEach((it) => {
+    it.classList.remove(`player-control--pause`);
+    // it.previousElementSibling.pause();
+    toggleState(it);
+  });
+  target.classList.add(`player-control--pause`);
+  toggleState(target);
 };

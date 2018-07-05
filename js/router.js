@@ -1,5 +1,5 @@
 import {changeScreen} from "./utils/utils";
-import {INITIAL_GAME, convertResult} from "./state";
+import INITIAL_GAME, {convertResult} from "./state";
 import WelcomeView from "./views/welcome-screen";
 import Game from "./game";
 import GameModel from "./game-model";
@@ -17,7 +17,7 @@ export default class Router {
       .then(() =>
         this.gameModel.data.forEach((el) => INITIAL_GAME.questions.push(el))
       )
-      .then(() => this.welcomeView.play())
+      .then(() => this.welcomeView.play());
       .catch(this.showError);
   }
 
@@ -25,7 +25,6 @@ export default class Router {
     this.showWelcome();
     this.welcomeView.play();
     this.welcomeView.onPlayClick = () => {
-      this.gameModel.resetState();
       this.showGame(INITIAL_GAME.questions);
     };
   }

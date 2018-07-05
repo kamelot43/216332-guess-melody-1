@@ -1,12 +1,10 @@
-import {changeResult} from "./state";
+import {changeResult, Result, QuestionType} from "./state";
 import {changeScreen, setPauseAndPlay} from "./utils/utils";
 import HeaderView from "./views/header";
 import ArtistView from "./views/artist-screen";
 import GenreView from "./views/genre-screen";
-import {Result, QuestionType} from "./data/data";
 import calcPoints from "./utils/calc-points";
 import ConfirmView from "./views/confirm-screen";
-import {timerAlarm} from "./utils/timer";
 import Router from "./router";
 
 class Game {
@@ -50,7 +48,8 @@ class Game {
 
   updateTime() {
     const header = new HeaderView(this.model.state);
-    const time = header.element.querySelector(`div.timer-value`);
+    const time = header.element.querySelector(`.timer-value`);
+    console.log(time);
     this.header.element.replaceChild(time, this.time);
     this.time = time;
   }
@@ -118,11 +117,13 @@ class Game {
         this.checkLevel(this.model.state);
         this.stopGame();
         return;
-      } else if (this.model.isAlarm()) {
-        timerAlarm(this.header.element);
       }
       this.model.tick();
       this.updateTime();
+
+      if (this.model.isAlarm()) {
+        this.time.classList.add(`timer-value--finished`);
+      }
     }, 1000);
   }
 

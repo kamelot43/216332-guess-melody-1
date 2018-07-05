@@ -58,7 +58,7 @@ class GameModel {
   }
 
   isAlarm() {
-    return this._state.time <= 30;
+    return this._state.time < 30;
   }
 
   nextLevel() {

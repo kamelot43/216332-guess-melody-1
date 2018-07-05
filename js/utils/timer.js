@@ -23,11 +23,3 @@ export const transformTime = (time) => {
     seconds
   };
 };
-
-export const timerAlarm = (element) => {
-  const timerNode = element.querySelector(`.timer`);
-  const circle = element.querySelector(`.timer-line`);
-  circle.classList.add(`timer-line--red`);
-  timerNode.classList.add(`timer-value`);
-  timerNode.classList.add(`timer-value--finished`);
-};
