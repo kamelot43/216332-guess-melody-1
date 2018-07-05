@@ -57,10 +57,6 @@ export const convertResult = (object) => {
 };
 
 export const changeLevel = (game, level) => {
-  if (level === undefined) {
-    throw new Error(`Level should be of type number`);
-  }
-
   return Object.assign({}, game, {
     level
   });

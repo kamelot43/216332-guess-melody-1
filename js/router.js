@@ -17,7 +17,7 @@ export default class Router {
       .then(() =>
         this.gameModel.data.forEach((el) => INITIAL_GAME.questions.push(el))
       )
-      .then(() => this.welcomeView.play());
+      .then(() => this.welcomeView.play())
       .catch(this.showError);
   }
 
@@ -25,6 +25,7 @@ export default class Router {
     this.showWelcome();
     this.welcomeView.play();
     this.welcomeView.onPlayClick = () => {
+      this.gameModel.resetState();
       this.showGame(INITIAL_GAME.questions);
     };
   }

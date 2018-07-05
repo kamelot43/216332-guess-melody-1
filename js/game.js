@@ -49,7 +49,6 @@ class Game {
   updateTime() {
     const header = new HeaderView(this.model.state);
     const time = header.element.querySelector(`.timer-value`);
-    console.log(time);
     this.header.element.replaceChild(time, this.time);
     this.time = time;
   }
@@ -105,7 +104,6 @@ class Game {
         this.checkLevel(this.model.state);
         break;
       case Result.NOOP:
-        // just do nothing
         break;
       default:
         throw new Error(`Unknown result`);

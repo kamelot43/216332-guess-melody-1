@@ -16,16 +16,16 @@ export default class HeaderView extends AbstractView {
       cx="390" cy="390" r="370"
       class="timer-line"
       style="filter: url(.#blur); transform: rotate(-90deg) scaleY(-1); transform-origin: center"></circle>
-    <div class="timer-value" xmlns="http://www.w3.org/1999/xhtml">
-      <span class="timer-value-mins">${
+  </svg>
+  <div class="timer-value" xmlns="http://www.w3.org/1999/xhtml">
+    <span class="timer-value-mins">${
   transformTime(this.game.time).minutes
 }</span><!--
-      --><span class="timer-value-dots">:</span><!--
-      --><span class="timer-value-secs">${
+    --><span class="timer-value-dots">:</span><!--
+    --><span class="timer-value-secs">${
   transformTime(this.game.time).seconds
 }</span>
-    </div>
-  </svg>
+  </div>
   <div class="main-mistakes">
       ${new Array(INITIAL_GAME.lives - this.game.lives)
         .fill(
