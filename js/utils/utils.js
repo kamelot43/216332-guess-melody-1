@@ -30,6 +30,9 @@ export const setPauseAndPlay = (arrays, evt) => {
     }
   });
 
-  target.classList.contains(`player-control--pause`) ? pauseAudio(target) : playAudio(target);
-
+  if (target.classList.contains(`player-control--pause`)) {
+    pauseAudio(target);
+  } else {
+    playAudio(target);
+  }
 };

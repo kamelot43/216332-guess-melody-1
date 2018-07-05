@@ -5,7 +5,7 @@ export const timer = (time) => {
       if (this.time > 0) {
         this.time--;
         return this.time;
-      }
+      } return false;
     }
   };
 };
